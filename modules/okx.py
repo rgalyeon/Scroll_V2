@@ -195,7 +195,8 @@ class Okx(Account):
         network = CHAINS_OKX[self.chain]
         amount = round(random.uniform(min_amount, max_amount), 8)
 
-        logger.info(f'[{self.account_id}][{self.address}] Start withdrawal from OKX {amount} {token_name}')
+        logger.info(f'[{self.account_id}][{self.address}] Start withdrawal from OKX {amount} {token_name} '
+                    f'to {self.chain.capitalize()}')
         curr_balance_wei = await self.w3.eth.get_balance(self.address)
 
         curr_balance = curr_balance_wei / 10 ** 18
