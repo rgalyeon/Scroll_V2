@@ -16,9 +16,10 @@ class Transfer(Account):
     async def find_chains_with_max_balance(self, chains: List[str], min_required_amount):
         source_chains = []
         for chain in chains:
-            w3 = AsyncWeb3(AsyncHTTPProvider(random.choice(RPC[chain]["rpc"])),
-                           middlewares=[async_geth_poa_middleware],
-                           request_kwargs=self.request_kwargs)
+            w3 = AsyncWeb3(AsyncHTTPProvider(random.choice(RPC[chain]["rpc"]),
+                                             request_kwargs=self.request_kwargs),
+                           middlewares=[async_geth_poa_middleware]
+                           )
             balance_wei = await w3.eth.get_balance(w3.to_checksum_address(self.address))
             balance = w3.from_wei(balance_wei, 'ether')
             if balance >= min_required_amount:
@@ -29,9 +30,10 @@ class Transfer(Account):
 
     def change_settings(self, source_chain):
         self.chain = source_chain
-        self.w3 = AsyncWeb3(AsyncHTTPProvider(random.choice(RPC[self.chain]["rpc"])),
+        self.w3 = AsyncWeb3(AsyncHTTPProvider(random.choice(RPC[self.chain]["rpc"]),
+                                              request_kwargs=self.request_kwargs),
                             middlewares=[async_geth_poa_middleware],
-                            request_kwargs=self.request_kwargs)
+                            )
         self.explorer = RPC[self.chain]["explorer"]
         self.token = RPC[self.chain]["token"]
 

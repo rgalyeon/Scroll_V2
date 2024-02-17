@@ -28,12 +28,12 @@ class Account:
         self.request_kwargs = {}
 
         if self.proxy:
-            self.request_kwargs = {"proxies": {"https": self.proxy, "http": self.proxy}}
+            self.request_kwargs = {"proxy": self.proxy}
 
         self.w3 = AsyncWeb3(
-            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC[chain]["rpc"])),
-            middlewares=[async_geth_poa_middleware],
-            request_kwargs=self.request_kwargs
+            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC[chain]["rpc"]),
+                                        request_kwargs=self.request_kwargs),
+            middlewares=[async_geth_poa_middleware]
         )
 
         self.account = EthereumAccount.from_key(self.private_key)
@@ -189,9 +189,9 @@ class Account:
 
     async def check_native_balance(self, chain: str):
         w3 = AsyncWeb3(
-            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC[chain]["rpc"])),
+            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC[chain]["rpc"]),
+                                        request_kwargs=self.request_kwargs),
             middlewares=[async_geth_poa_middleware],
-            request_kwargs=self.request_kwargs
         )
 
         balance_wei = await w3.eth.get_balance(self.address)
