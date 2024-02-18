@@ -14,13 +14,18 @@ from settings import (
     SLEEP_FROM,
     QUANTITY_THREADS,
     THREAD_SLEEP_FROM,
-    THREAD_SLEEP_TO
+    THREAD_SLEEP_TO,
+    SAVE_LOGS
 )
 from modules_settings import *
 from utils.sleeping import sleep
 from utils.logs_handler import filter_out_utils
 from utils.password_handler import get_wallet_data
 from itertools import count
+import threading
+
+
+transaction_lock = threading.Lock()
 
 
 def get_module():
@@ -61,6 +66,7 @@ def get_module():
             Choice(f"{next(counter)}) Use Multiswap", swap_multiswap),
             Choice(f"{next(counter)}) Use custom routes", custom_routes),
             Choice(f"{next(counter)}) Use automatic routes", automatic_routes),
+            Choice(f"{next(counter)}) Withdraw_rhino", withdraw_rhino),
             Choice(f"{next(counter)}) Check transaction count", "tx_checker"),
             Choice(f"{next(counter)}) Exit", "exit"),
         ],
@@ -118,7 +124,8 @@ def main(module):
 if __name__ == '__main__':
     print("❤️ Author – https://t.me/rgalyeon\n")
 
-    logger.add('logs.txt', filter=filter_out_utils)
+    if SAVE_LOGS:
+        logger.add('logs.txt', filter=filter_out_utils)
 
     module = get_module()
     if module == "tx_checker":

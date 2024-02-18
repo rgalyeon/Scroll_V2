@@ -9,6 +9,7 @@ from settings import CHECK_GWEI, MAX_GWEI, RANDOMIZE_GWEI, MAX_GWEI_RANGE, GAS_S
 from loguru import logger
 import json
 from utils.sleeping import sleep
+from main import transaction_lock
 
 
 def get_max_gwei_user_settings():
@@ -66,8 +67,12 @@ async def wait_gas():
 
 def check_gas(func):
     async def _wrapper(*args, **kwargs):
-        if CHECK_GWEI:
-            await wait_gas()
-        return await func(*args, **kwargs)
+        with transaction_lock:
+            if CHECK_GWEI:
+                await wait_gas()
+            result = await func(*args, **kwargs)
+            if CHECK_GWEI:
+                await sleep(60, 120)
+            return result
 
     return _wrapper

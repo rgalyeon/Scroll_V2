@@ -396,3 +396,8 @@ class RhinoFi(Transfer):
             raise ValueError(f"Rhino error: {error}")
         finally:
             await self.session.close()
+
+    async def withdraw_all(self, dst_chain):
+        rhino_user_config = await self.get_user_config()
+        amount = int(await self.get_user_balance()) / (10 ** 8)
+        await self.withdraw_from_rhino(rhino_user_config, amount, dst_chain, self.address)

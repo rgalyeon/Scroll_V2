@@ -91,15 +91,15 @@ async def withdraw_okx(wallet_info):
     token = 'ETH'
     chains = ['arbitrum', 'zksync', 'linea', 'base', 'optimism']
 
-    min_amount = 0.3
-    max_amount = 0.4
+    min_amount = 0.0070
+    max_amount = 0.0072
 
     terminate = False
 
     skip_enabled = False
     skip_threshold = 0.00327
 
-    wait_unlimited_time = True
+    wait_unlimited_time = False
     sleep_between_attempts = [10, 20]  # min, max
 
     okx_exchange = Okx(wallet_info, chains)
@@ -746,8 +746,8 @@ async def automatic_routes(wallet_info):
     transaction_count = 15
     cheap_ratio = 0.95
 
-    sleep_from = 60000
-    sleep_to = 110000
+    sleep_from = 30000
+    sleep_to = 70000
 
     use_none = True
     cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, deploy_contract, check_in_secondlive]
@@ -822,3 +822,9 @@ async def check_in_secondlive(wallet_info):
 
 def get_tx_count():
     asyncio.run(check_tx())
+
+
+async def withdraw_rhino(wallet_info):
+
+    rhino_ = RhinoFi(wallet_info)
+    await rhino_.withdraw_all("Scroll")
