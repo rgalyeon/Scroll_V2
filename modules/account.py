@@ -1,13 +1,12 @@
 import asyncio
 import time
 import random
-from typing import Union, Type, Dict, Any
+from typing import Dict, Any
 
 from hexbytes import HexBytes
 from loguru import logger
 from web3 import AsyncWeb3
 from eth_account import Account as EthereumAccount
-from web3.contract import Contract
 from web3.exceptions import TransactionNotFound
 from web3.middleware import async_geth_poa_middleware
 
@@ -23,7 +22,7 @@ class Account:
         self.chain = chain
         self.explorer = RPC[chain]["explorer"]
         self.token = RPC[chain]["token"]
-        self.proxy = f"http://{wallet_info['proxy']}"
+        self.proxy = f"http://{wallet_info['proxy']}" if wallet_info['proxy'] else None
 
         self.request_kwargs = {}
 
@@ -42,7 +41,7 @@ class Account:
         if wallet_info['okx_address']:
             self.okx_address = self.w3.to_checksum_address(wallet_info['okx_address'])
 
-    async def get_tx_data(self, value: int = 0, gas_price: bool = True):
+    async def get_tx_data(self, value: int = 0):
         tx = {
             "chainId": await self.w3.eth.chain_id,
             "from": self.address,
@@ -50,7 +49,7 @@ class Account:
             "nonce": await self.w3.eth.get_transaction_count(self.address),
         }
 
-        if gas_price:
+        if not RPC[self.chain]["eip1559"]:
             tx.update({"gasPrice": await self.w3.eth.gas_price})
 
         return tx
@@ -162,7 +161,7 @@ class Account:
                 await asyncio.sleep(1)
 
     async def sign(self, transaction) -> Any:
-        if transaction.get("gasPrice", None) is None:
+        if RPC[self.chain]["eip1559"]:
             max_priority_fee_per_gas = self.w3.to_wei(MAX_PRIORITY_FEE["ethereum"], "gwei")
             max_fee_per_gas = await self.w3.eth.gas_price
 
@@ -170,6 +169,7 @@ class Account:
                 {
                     "maxPriorityFeePerGas": max_priority_fee_per_gas,
                     "maxFeePerGas": max_fee_per_gas,
+                    "type": "0x2"
                 }
             )
 
