@@ -4,62 +4,71 @@
       "https://rpc.ankr.com/eth"
     ],
     "explorer": "https://etherscan.io/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": true
   },
   "arbitrum": {
     "rpc": [
       "https://rpc.ankr.com/arbitrum"
     ],
     "explorer": "https://arbiscan.io/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": true
   },
   "optimism": {
     "rpc": [
       "https://rpc.ankr.com/optimism"
     ],
     "explorer": "https://optimistic.etherscan.io/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": true
   },
   "polygon_zkevm": {
     "rpc": [
       "https://rpc.ankr.com/polygon_zkevm"
     ],
     "explorer": "https://zkevm.polygonscan.com/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": false
   },
   "zksync": {
     "rpc": [
       "https://rpc.ankr.com/zksync_era"
     ],
     "explorer": "https://explorer.zksync.io/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": true
   },
   "base": {
     "rpc": [
       "https://rpc.ankr.com/base"
     ],
     "explorer": "https://basescan.org/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": true
   },
   "scroll": {
     "rpc": [
       "https://rpc.scroll.io"
     ],
     "explorer": "https://scrollscan.com/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": false
   },
   "linea": {
     "rpc": [
       "https://1rpc.io/linea"
     ],
     "explorer": "https://lineascan.build/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": true
   },
   "zora": {
     "rpc": [
       "https://rpc.zora.energy"
     ],
     "explorer": "https://zora.superscan.network/tx/",
-    "token": "ETH"
+    "token": "ETH",
+    "eip1559": false
   }
 }
