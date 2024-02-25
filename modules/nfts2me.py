@@ -1,5 +1,4 @@
 import random
-from typing import List
 
 from loguru import logger
 from config import NFTS2ME_ABI
@@ -14,17 +13,27 @@ class Minter(Account):
 
     @retry
     @check_gas
-    async def mint_nft(self, contracts: List):
+    async def mint_nft(self, contracts):
+
         logger.info(f"[{self.account_id}][{self.address}] Mint NFT on NFTS2ME")
+        nfts = contracts.copy()
 
-        contract = self.get_contract(random.choice(contracts), NFTS2ME_ABI)
-
-        tx_data = await self.get_tx_data()
-
-        transaction = await contract.functions.mint(1).build_transaction(tx_data)
-
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        while len(nfts):
+            contr, method = random.choice(contracts)
+            contract = self.get_contract(contr, NFTS2ME_ABI)
+            balance = await contract.functions.balanceOf(self.address).call()
+            if balance == 0:
+                tx_data = await self.get_tx_data()
+                if method == 'mint':
+                    transaction = await contract.functions.mint().build_transaction(tx_data)
+                elif method == 'mintRandomTo':
+                    transaction = await contract.functions.mintRandomTo(self.address, 1).build_transaction(tx_data)
+                else:
+                    raise ValueError('Unknown mint method')
+                signed_txn = await self.sign(transaction)
+                txn_hash = await self.send_raw_transaction(signed_txn)
+                await self.wait_until_tx_finished(txn_hash.hex())
+                break
+            nfts.remove(contr)
+        else:
+            logger.info(f"[{self.account_id}][{self.address}] All nfts minted. Skip module")

@@ -1,0 +1,16 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "date",
+        "type": "uint256"
+      }
+    ],
+    "name": "checkIn",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

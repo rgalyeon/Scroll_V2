@@ -49,7 +49,7 @@
     "rpc": [
       "https://rpc.ankr.com/zksync_era"
     ],
-    "explorer": "https://explorer.zksync.io/tx/",
+    "explorer": "https://era.zksync.network/tx/",
     "token": "ETH",
     "eip1559": true,
     "chain_id": 324

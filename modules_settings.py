@@ -193,41 +193,6 @@ async def bridge_orbiter(wallet_info):
     )
 
 
-async def bridge_rhino(wallet_info):
-    """
-    Bridge ETH from RhinoFi
-    ______________________________________________________
-    Description: Look at bridge_orbiter description
-    """
-
-    from_chains = ["linea"]
-    to_chain = "scroll"
-
-    min_amount = 0.0002
-    max_amount = 0.0003
-    decimal = 6
-
-    all_amount = True
-
-    min_percent = 98
-    max_percent = 100
-
-    check_balance_on_dest = True
-    check_amount = 0.005
-    save_funds = [0.0008, 0.001]
-    min_required_amount = 0
-
-    bridge_from_all_chains = False
-    sleep_between_transfers = [120, 300]
-
-    rhino_inst = RhinoFi(wallet_info)
-    await rhino_inst.transfer_eth(
-        from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
-        check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
-        sleep_between_transfers=sleep_between_transfers
-    )
-
-
 async def bridge_layerswap(wallet_info):
     """
     Bridge from Layerswap
@@ -534,10 +499,18 @@ async def mint_nft(wallet_info):
     """
     Mint NFT on NFTS2ME
     ______________________________________________________
-    contracts - list NFT contract addresses
+    contracts - list NFT contract addresses  (contract_address, method (mint/mintRandomTo))
     """
 
-    contracts = [""]
+    contracts = [
+        ('0x24178Df853B4Db50B0EC8A8afd7DF51229e3b346', 'mint'),  # potato
+        ('0x9E519a8B155C7Cf9ff74D666db079716FFC47318', 'mint'),  # Duality
+        ('0xe08c47aeBEaC2d8Ed49AD64d65f6e65877F5716b', 'mint'),  # Architect.l2p
+        ('0x1cFe398220E3A76cd05ce98F68e8cB7E5c96A8A0', 'mintRandomTo'),  # LayerZero memes
+        ('0x5128ED5C206eBb80068E13f058ba476F27449C26', 'mint'),  # not onchain identity
+        ('0xd20F23a8BbBE6e5B63D97b1a94Cc2E111706FB98', 'mint'),  # Autumn zorb
+        ('0xE1C60ae5EA9171ABE3FCD3f0Fd8007918e1f961F', 'mint'),  # Not eligible
+    ]
 
     minter = Minter(wallet_info)
     await minter.mint_nft(contracts)
@@ -675,6 +648,20 @@ async def inscribe_orbiter(wallet_info):
     await orb_inscriptions.mint_orbiter_inscription(dest_chains)
 
 
+async def owlto_check_in(wallet_info):
+    """
+    Owlto daily check in. Send tx and press button on site
+    ______________________________________________________
+
+    ref - wallet address of referral
+    """
+
+    ref = "0xE022adf1735642DBf8684C05f53Fe0D8339F5663"
+
+    owlto_inst = Owlto(wallet_info)
+    await owlto_inst.check_in(ref)
+
+
 async def custom_routes(wallet_info):
     """
     BRIDGE:
@@ -750,7 +737,7 @@ async def automatic_routes(wallet_info):
     sleep_to = 70000
 
     use_none = True
-    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, deploy_contract, check_in_secondlive]
+    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, check_in_secondlive]
     expensive_modules = [create_omnisea, create_safe, mint_zerius]
 
     routes_inst = Routes(wallet_info)
@@ -822,9 +809,3 @@ async def check_in_secondlive(wallet_info):
 
 def get_tx_count():
     asyncio.run(check_tx())
-
-
-async def withdraw_rhino(wallet_info):
-
-    rhino_ = RhinoFi(wallet_info)
-    await rhino_.withdraw_all("Scroll")

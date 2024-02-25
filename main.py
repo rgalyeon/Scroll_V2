@@ -23,6 +23,7 @@ from utils.logs_handler import filter_out_utils
 from utils.password_handler import get_wallet_data
 from itertools import count
 import threading
+from config import HEADER
 
 
 transaction_lock = threading.Lock()
@@ -39,7 +40,6 @@ def get_module():
             Choice(f"{next(counter)}) Transfer to OKX", transfer_to_okx),
             Choice(f"{next(counter)}) Withdraw from Scroll", withdraw_scroll),
             Choice(f"{next(counter)}) Bridge Orbiter", bridge_orbiter),
-            Choice(f"{next(counter)}) Bridge RhinoFi", bridge_rhino),
             Choice(f"{next(counter)}) Bridge Layerswap", bridge_layerswap),
             Choice(f"{next(counter)}) Wrap ETH", wrap_eth),
             Choice(f"{next(counter)}) Unwrap ETH", unwrap_eth),
@@ -60,13 +60,13 @@ def get_module():
             Choice(f"{next(counter)}) Deploy contract", deploy_contract),
             Choice(f"{next(counter)}) Vote on Rubyscore", vote_rubyscore),
             Choice(f"{next(counter)}) Sign In on SecondLive", check_in_secondlive),
+            Choice(f"{next(counter)}) Check In on Owlto", owlto_check_in),
             Choice(f"{next(counter)}) Mint Scroll Origins NFT", nft_origins),
             Choice(f"{next(counter)}) Mint inscription on Orbiter", inscribe_orbiter),
             Choice(f"{next(counter)}) Swap tokens to ETH", swap_tokens),
             Choice(f"{next(counter)}) Use Multiswap", swap_multiswap),
             Choice(f"{next(counter)}) Use custom routes", custom_routes),
             Choice(f"{next(counter)}) Use automatic routes", automatic_routes),
-            Choice(f"{next(counter)}) Withdraw_rhino", withdraw_rhino),
             Choice(f"{next(counter)}) Check transaction count", "tx_checker"),
             Choice(f"{next(counter)}) Exit", "exit"),
         ],
@@ -122,7 +122,8 @@ def main(module):
 
 
 if __name__ == '__main__':
-    print("❤️ Author – https://t.me/rgalyeon\n")
+    print(HEADER)
+    print("Author – https://t.me/rgalyeon\n")
 
     if SAVE_LOGS:
         logger.add('logs.txt', filter=filter_out_utils)
@@ -133,4 +134,5 @@ if __name__ == '__main__':
     else:
         main(module)
 
-    print("❤️ Author – https://t.me/rgalyeon\n")
+    print("ALL DONE")
+    print("Author – https://t.me/rgalyeon\n")

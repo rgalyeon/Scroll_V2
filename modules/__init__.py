@@ -25,5 +25,5 @@ from .nftorigins import NftOrigins
 from .orbiter_inscriptions import OrbiterInscription
 from .rubyscore import Rubyscore
 from .secondlive import SecondLive
-from .rhino import RhinoFi
 from .transfer import Transfer
+from .owlto import Owlto
