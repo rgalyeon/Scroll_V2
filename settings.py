@@ -30,7 +30,7 @@ MAX_PRIORITY_FEE = {
     "polygon": 40,
     "arbitrum": 0.1,
     "base": 0.001,
-    "zksync": 0.25,
+    "zksync": 0.1,
     "optimism": 0.01
 }
 
