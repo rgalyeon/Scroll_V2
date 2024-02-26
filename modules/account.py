@@ -162,7 +162,7 @@ class Account:
 
     async def sign(self, transaction) -> Any:
         if RPC[self.chain]["eip1559"]:
-            max_priority_fee_per_gas = self.w3.to_wei(MAX_PRIORITY_FEE["ethereum"], "gwei")
+            max_priority_fee_per_gas = self.w3.to_wei(MAX_PRIORITY_FEE[self.chain], "gwei")
             max_fee_per_gas = await self.w3.eth.gas_price
 
             transaction.update(
