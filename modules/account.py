@@ -11,7 +11,7 @@ from web3.exceptions import TransactionNotFound
 from web3.middleware import async_geth_poa_middleware
 
 from config import RPC, ERC20_ABI, SCROLL_TOKENS
-from settings import GAS_MULTIPLIER
+from settings import GAS_MULTIPLIER, USE_PROXY
 from utils.sleeping import sleep
 
 
@@ -22,7 +22,7 @@ class Account:
         self.chain = chain
         self.explorer = RPC[chain]["explorer"]
         self.token = RPC[chain]["token"]
-        self.proxy = f"http://{wallet_info['proxy']}" if wallet_info['proxy'] else None
+        self.proxy = f"http://{wallet_info['proxy']}" if USE_PROXY and wallet_info['proxy'] else None
 
         self.request_kwargs = {}
 
