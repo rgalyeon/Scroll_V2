@@ -11,7 +11,7 @@ from web3.exceptions import TransactionNotFound
 from web3.middleware import async_geth_poa_middleware
 
 from config import RPC, ERC20_ABI, SCROLL_TOKENS
-from settings import GAS_MULTIPLIER, MAX_PRIORITY_FEE
+from settings import GAS_MULTIPLIER
 from utils.sleeping import sleep
 
 
@@ -162,7 +162,7 @@ class Account:
 
     async def sign(self, transaction) -> Any:
         if RPC[self.chain]["eip1559"]:
-            max_priority_fee_per_gas = self.w3.to_wei(MAX_PRIORITY_FEE[self.chain], "gwei")
+            max_priority_fee_per_gas = int(await self.get_priority_fee() * GAS_MULTIPLIER)
             max_fee_per_gas = await self.w3.eth.gas_price
 
             transaction.update(
@@ -196,3 +196,13 @@ class Account:
 
         balance_wei = await w3.eth.get_balance(self.address)
         return w3.from_wei(balance_wei, 'ether')
+
+    async def get_priority_fee(self) -> int:
+        fee_history = await self.w3.eth.fee_history(25, 'latest', [20.0])
+        non_empty_block_priority_fees = [fee[0] for fee in fee_history["reward"] if fee[0] != 0]
+
+        divisor_priority = max(len(non_empty_block_priority_fees), 1)
+
+        priority_fee = int(round(sum(non_empty_block_priority_fees) / divisor_priority))
+
+        return priority_fee
