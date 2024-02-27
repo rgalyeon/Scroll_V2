@@ -1,3 +1,4 @@
+![scroll_repo](https://github.com/rgalyeon/Scroll_V2/assets/28117274/fb91b035-ec1c-4ddb-85e9-8c5597c9440e)
 # Scroll V2
 Software for working with the Scroll chain. Supports multiple OKX accounts, multithreading, encrypts sensitive data, after encryption wallets can be started using only the wallet address (no need to re-enter data). This is updated version of the [SybilWave fork software](https://github.com/rgalyeon/scroll).
 
