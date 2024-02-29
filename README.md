@@ -13,7 +13,7 @@ With the help of the software you can make a withdrawal from the OKX exchange, b
 3. `custom_routes` - module for customizing your own route
 4. `automatic_routes` - module for automatic route building. You can customize the number of required transactions, you can add skipping some transactions. You can configure delays between transactions. You can control the probability of making cheap transactions and expensive ones.
 5. Off bridge
-6. Orbiter/Rhino/Layerswap bridge
+6. Orbiter/Layerswap bridge
 7. Transfer ETH
 8. Swap Skydropme/Syncswap/Zebra
 9. Deposit/withdraw to/from layerbank/rocketsam
