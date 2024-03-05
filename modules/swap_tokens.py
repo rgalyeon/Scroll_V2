@@ -16,6 +16,7 @@ class SwapTokens(Account):
             "skydrome": Skydrome,
             "zebra": Zebra,
         }
+        self.wallet_info = wallet_info
 
     def get_swap_module(self, use_dex: list):
         swap_module = random.choice(use_dex)
@@ -42,7 +43,7 @@ class SwapTokens(Account):
             balance = await self.get_balance(SCROLL_TOKENS[token])
 
             if balance["balance_wei"] > 0:
-                swap_module = self.get_swap_module(use_dex)(self.account_id, self.private_key)
+                swap_module = self.get_swap_module(use_dex)(self.wallet_info)
                 await swap_module.swap(
                     token,
                     "ETH",
