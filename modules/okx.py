@@ -242,7 +242,7 @@ class Okx(Account):
 
         await exchange.close()
         logger.info(f'Transaction sent. Waiting money from OKX')
-        while curr_balance == await self.w3.eth.get_balance(self.address):
+        while curr_balance_wei == await self.w3.eth.get_balance(self.address):
             await asyncio.sleep(60)
 
         logger.success(f'[{self.account_id}][{self.address}] Successfully withdrawn {amount} {token_name} ')
