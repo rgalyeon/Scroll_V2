@@ -78,8 +78,6 @@ class Scroll(Transfer):
 
         await self.wait_until_tx_finished(txn_hash.hex())
 
-    @retry
-    @check_gas
     async def withdraw(
             self,
             min_amount: float, max_amount: float, decimal: int,
