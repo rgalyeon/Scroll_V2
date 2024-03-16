@@ -65,7 +65,7 @@ class Scroll(Transfer):
 
         fee = await contract_oracle.functions.estimateCrossDomainMessageFee(168000).call()
 
-        tx_data = await self.get_tx_data(amount_wei + fee, False)
+        tx_data = await self.get_tx_data(amount_wei + fee)
 
         transaction = await contract.functions.depositETH(
             amount_wei,
