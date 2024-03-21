@@ -41,13 +41,17 @@ def get_module():
             Choice(f"{next(counter)}) Withdraw from Scroll", withdraw_scroll),
             Choice(f"{next(counter)}) Bridge Orbiter", bridge_orbiter),
             Choice(f"{next(counter)}) Bridge Layerswap", bridge_layerswap),
+            Choice(f"{next(counter)}) Bridge Nitro", bridge_nitro),
             Choice(f"{next(counter)}) Wrap ETH", wrap_eth),
             Choice(f"{next(counter)}) Unwrap ETH", unwrap_eth),
             Choice(f"{next(counter)}) Swap on Skydrome", swap_skydrome),
             Choice(f"{next(counter)}) Swap on Zebra", swap_zebra),
             Choice(f"{next(counter)}) Swap on SyncSwap", swap_syncswap),
+            Choice(f"{next(counter)}) Swap on Ambient", swap_ambient),
             Choice(f"{next(counter)}) Deposit LayerBank", deposit_layerbank),
             Choice(f"{next(counter)}) Withdraw LayerBank", withdraw_layerbank),
+            Choice(f"{next(counter)}) Deposit Aave", deposit_aave),
+            Choice(f"{next(counter)}) Withdraw Aave", withdraw_aave),
             Choice(f"{next(counter)}) Deposit RocketSam", deposit_rocketsam),
             Choice(f"{next(counter)}) Withdraw RocketSam", withdraw_rocketsam),
             Choice(f"{next(counter)}) Mint and Bridge Zerius NFT", mint_zerius),
@@ -74,7 +78,7 @@ def get_module():
         pointer="✅ "
     ).ask()
     if result == "exit":
-        print("❤️ Author – https://t.me/rgalyeon\n")
+        print("❤️ Author – https://t.me/block_nine\n")
         sys.exit()
     return result
 
@@ -123,7 +127,7 @@ def main(module):
 
 if __name__ == '__main__':
     print(HEADER)
-    print("Author – https://t.me/rgalyeon\n")
+    print("Author – https://t.me/block_nine\n")
 
     if SAVE_LOGS:
         logger.add('logs.txt', filter=filter_out_utils)
@@ -135,4 +139,4 @@ if __name__ == '__main__':
         main(module)
 
     print("ALL DONE")
-    print("Author – https://t.me/rgalyeon\n")
+    print("Author – https://t.me/block_nine\n")

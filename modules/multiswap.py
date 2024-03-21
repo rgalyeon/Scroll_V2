@@ -15,6 +15,7 @@ class Multiswap(Account):
             "syncswap": SyncSwap,
             "skydrome": Skydrome,
             "zebra": Zebra,
+            "ambient": Ambient,
         }
 
         self.wallet_info = wallet_info

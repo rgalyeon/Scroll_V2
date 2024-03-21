@@ -88,6 +88,12 @@ with open('data/orbiter_maker.json', 'r') as file:
 with open("data/abi/owlto/abi.json", "r") as file:
     OWLTO_CHECKIN_ABI = json.load(file)
 
+with open("data/abi/ambient/abi.json", "r") as file:
+    AMBIENT_ABI = json.load(file)
+
+with open("data/abi/aave/abi.json", "r") as file:
+    AAVE_ABI = json.load(file)
+
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 BRIDGE_CONTRACTS = {
@@ -140,6 +146,10 @@ RUBYSCORE_CONTRACT = "0xe10Add2ad591A7AC3CA46788a06290De017b9fB4"
 SECONDLIVE_CONTRACT = "0xAC1f9Fadc33cC0799Cf7e3051E5f6b28C98966EE"
 
 OWLTO_CHECKIN_CONTRACT = "0xE6FEcA764B7548127672C189D303eb956c3Ba372"
+
+AMBIENT_CONTRACT = "0xaaaaAAAACB71BF2C8CaE522EA5fa455571A74106"
+
+AAVE_CONTRACT = "0xFF75A4B698E3Ec95E608ac0f22A03B8368E05F5D"
 
 SCROLLSCAN_URL = 'https://api.scrollscan.com/api'
 
@@ -233,6 +243,49 @@ RHINO_CHAIN_INFO = {
     9: 'STARKNET',
     10: 'ZKEVM',
     11: 'ZKSYNC',
+}
+
+COINGECKO_TOKEN_API_NAMES = {
+     'ETH': 'ethereum',
+     'ASTR': 'astar',
+     'AVAX': 'avalanche-2',
+     'BNB': 'binancecoin',
+     'CANTO': 'canto',
+     'CELO': 'celo',
+     'CFX': 'conflux-token',
+     'COREDAO': 'coredaoorg',
+     'JEWEL': 'defi-kingdoms',
+     'FTM': 'fantom',
+     'FUSE': 'fuse-network-token',
+     'GETH': 'goerli-eth',
+     'xDAI': 'xdai',
+     'ONE': 'harmony',
+     'ZEN': 'zencash',
+     'KAVA': 'kava',
+     'KLAY': 'klay-token',
+     'AGLD': 'adventure-gold',
+     'MNT': 'mantle',
+     'MTR': 'meter-stable',
+     'METIS': 'metis-token',
+     'GLMR': 'moonbeam',
+     'MOVR': 'moonriver',
+     'OKT': 'oec-token',
+     'MATIC': 'matic-network',
+     'SMR': 'shimmer',
+     'TLOS': 'telos',
+     'TOMOE': 'tomoe',
+     'TENET': 'tenet-1b000f7b-59cb-4e06-89ce-d62b32d362b9',
+     'XPLA': 'xpla',
+     'BEAM': 'beam-2',
+     'INJ': 'injective-protocol',
+     'DAI': 'dai',
+     'USDT': 'tether',
+     'USDC': 'usd-coin',
+     'USDC.e': 'bridged-usdc-polygon-pos-bridge',
+     'BUSD': 'binance-usd',
+     'WETH': 'ethereum',
+     'USDbC': 'bridged-usd-coin-base',
+     'STG': 'stargate-finance'
 }
 
 HEADER = """███████╗ ██████╗██████╗  ██████╗ ██╗     ██╗         ██╗   ██╗██████╗ 

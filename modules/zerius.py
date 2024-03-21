@@ -63,10 +63,8 @@ class Zerius(Account):
 
     @retry
     @check_gas
-    async def bridge(self, chain: List, sleep_from: int, sleep_to: int):
+    async def bridge(self, chain: List, mint_nft, sleep_from: int, sleep_to: int):
         chain_id = random.choice(chain)
-
-        mint_nft = await self.mint()
 
         nft_id = await self.get_nft_id(mint_nft)
 
@@ -93,3 +91,8 @@ class Zerius(Account):
         txn_hash = await self.send_raw_transaction(signed_txn)
 
         await self.wait_until_tx_finished(txn_hash.hex())
+
+    async def mint_and_bridge(self, chain, sleep_from, sleep_to):
+        mint_nft = await self.mint()
+
+        await self.bridge(chain, mint_nft, sleep_from, sleep_to)

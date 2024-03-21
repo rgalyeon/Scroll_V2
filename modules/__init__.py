@@ -5,6 +5,7 @@ from .layerswap import LayerSwap
 from .skydrome import Skydrome
 from .zebra import Zebra
 from .syncswap import SyncSwap
+from .ambient import Ambient
 from .layerbank import LayerBank
 from .rocketsam import RocketSam
 from .zerius import Zerius
@@ -27,3 +28,5 @@ from .rubyscore import Rubyscore
 from .secondlive import SecondLive
 from .transfer import Transfer
 from .owlto import Owlto
+from .aave import Aave
+from .nitro import Nitro

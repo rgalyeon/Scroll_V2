@@ -1,16 +1,17 @@
 from loguru import logger
-from config import LAYERBANK_CONTRACT, LAYERBANK_WETH_CONTRACT, LAYERBANK_ABI
+from config import AAVE_CONTRACT, AAVE_ABI
 from utils.gas_checker import check_gas
 from utils.helpers import retry
-from utils.sleeping import sleep
 from .account import Account
+from utils.sleeping import sleep
 
 
-class LayerBank(Account):
+class Aave(Account):
     def __init__(self, wallet_info) -> None:
         super().__init__(wallet_info=wallet_info, chain="scroll")
 
-        self.contract = self.get_contract(LAYERBANK_CONTRACT, LAYERBANK_ABI)
+        self.contract = self.get_contract(AAVE_CONTRACT, AAVE_ABI)
+        self.aave_weth_contract = "0xf301805be1df81102c957f6d4ce29d2b8c056b2a"
 
     async def router(self, min_amount,
                      max_amount,
@@ -37,56 +38,54 @@ class LayerBank(Account):
             await sleep(sleep_from, sleep_to)
             await self.withdraw()
 
-    async def get_deposit_amount(self):
-        weth_contract = self.get_contract(LAYERBANK_WETH_CONTRACT)
+    @retry
+    @check_gas
+    async def deposit(self, amount_wei, amount, balance):
 
-        amount = await weth_contract.functions.balanceOf(self.address).call()
+        logger.info(f"[{self.account_id}][{self.address}] Make deposit on AAVE | {amount} ETH")
+
+        undefined = "0x11fCfe756c05AD438e312a7fd934381537D3cFfe"
+        tx_data = await self.get_tx_data(amount_wei)
+        transaction = await self.contract.functions.depositETH(
+            self.w3.to_checksum_address(undefined),
+            self.w3.to_checksum_address(self.address),
+            0
+        ).build_transaction(tx_data)
+
+        signed_txn = await self.sign(transaction)
+        txn_hash = await self.send_raw_transaction(signed_txn)
+        await self.wait_until_tx_finished(txn_hash.hex())
+
+    async def get_deposit_amount(self):
+        aave_weth_contract = self.get_contract(self.aave_weth_contract)
+
+        amount = await aave_weth_contract.functions.balanceOf(self.address).call()
 
         return amount
 
     @retry
     @check_gas
-    async def deposit(self, amount_wei, amount, balance) -> None:
-
-        logger.info(f"[{self.account_id}][{self.address}] Make deposit on LayerBank | {amount} ETH")
-
-        tx_data = await self.get_tx_data(amount_wei)
-
-        transaction = await self.contract.functions.supply(
-            self.w3.to_checksum_address(LAYERBANK_WETH_CONTRACT),
-            amount_wei,
-        ).build_transaction(tx_data)
-
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
-
-    @retry
-    @check_gas
-    async def withdraw(self) -> None:
+    async def withdraw(self):
         amount = await self.get_deposit_amount()
+        balance = self.w3.from_wei(amount, 'ether')
 
         if amount > 0:
             logger.info(
-                f"[{self.account_id}][{self.address}] Make withdraw from LayerBank | " +
-                f"{self.w3.from_wei(amount, 'ether')} ETH"
+                f"[{self.account_id}][{self.address}] Make withdraw {balance} ETH from Aave"
             )
 
-            await self.approve(amount, LAYERBANK_WETH_CONTRACT, LAYERBANK_CONTRACT)
+            await self.approve(amount, self.aave_weth_contract, AAVE_CONTRACT)
 
             tx_data = await self.get_tx_data()
 
-            transaction = await self.contract.functions.redeemUnderlying(
-                self.w3.to_checksum_address(LAYERBANK_WETH_CONTRACT),
+            transaction = await self.contract.functions.withdrawETH(
+                self.w3.to_checksum_address("0x11fCfe756c05AD438e312a7fd934381537D3cFfe"),
                 amount,
+                self.address
             ).build_transaction(tx_data)
 
             signed_txn = await self.sign(transaction)
-
             txn_hash = await self.send_raw_transaction(signed_txn)
-
             await self.wait_until_tx_finished(txn_hash.hex())
         else:
-            logger.error(f"[{self.account_id}][{self.address}] Deposit not found")
+            logger.warning(f"[{self.account_id}][{self.address}] Deposit not found. Skip module")

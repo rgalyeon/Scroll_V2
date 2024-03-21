@@ -228,6 +228,41 @@ async def bridge_layerswap(wallet_info):
     )
 
 
+async def bridge_nitro(wallet_info):
+    """
+    Bridge from Nitro
+    ______________________________________________________
+    Description: Look at bridge_orbiter description
+    """
+
+    from_chains = ["optimism"]
+    to_chain = "scroll"
+
+    min_amount = 0.0002
+    max_amount = 0.0003
+    decimal = 6
+
+    all_amount = True
+
+    min_percent = 100
+    max_percent = 100
+
+    check_balance_on_dest = False
+    check_amount = 0.005
+    save_funds = [0.0003, 0.0005]
+    min_required_amount = 0
+
+    bridge_from_all_chains = False
+    sleep_between_transfers = [120, 300]
+
+    nitro_inst = Nitro(wallet_info=wallet_info)
+    await nitro_inst.transfer_eth(
+        from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
+        check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
+        sleep_between_transfers=sleep_between_transfers
+    )
+
+
 async def wrap_eth(wallet_info):
     """
     Wrap ETH
@@ -371,6 +406,33 @@ async def swap_syncswap(wallet_info):
     )
 
 
+async def swap_ambient(wallet_info):
+    """
+    Make swap on SyncSwap
+    You can swap only ETH to any token or any token to ETH!
+    ______________________________________________________
+    Description: look at swap_skydrome description
+    """
+
+    from_token = "USDC"
+    to_token = "ETH"
+
+    min_amount = 1
+    max_amount = 2
+    decimal = 6
+    slippage = 1
+
+    all_amount = True
+
+    min_percent = 100
+    max_percent = 100
+
+    ambient_inst = Ambient(wallet_info)
+    await ambient_inst.swap(
+        from_token, to_token, min_amount, max_amount, decimal, slippage, all_amount, min_percent, max_percent
+    )
+
+
 async def deposit_layerbank(wallet_info):
     """
     Make deposit on LayerBank
@@ -405,7 +467,47 @@ async def deposit_layerbank(wallet_info):
     max_percent = 35
 
     layerbank_inst = LayerBank(wallet_info)
-    await layerbank_inst.deposit(
+    await layerbank_inst.router(
+        min_amount, max_amount, decimal, sleep_from, sleep_to, make_withdraw, all_amount, min_percent, max_percent
+    )
+
+
+async def deposit_aave(wallet_info):
+    """
+    Make deposit on Aave
+    ______________________________________________________
+    min_amount - the minimum possible amount for deposit
+    max_amount - maximum possible amount for deposit
+    decimal - to which digit to round the amount to be deposited
+
+    make_withdraw - True, if need withdraw after deposit
+    sleep_from, sleep_to - minimum/maximum delay before withdrawal (if make_withdraw = True)
+
+    all_amount - if True, percentage values will be used for deposit (min_percent, max_percent
+                 instead of min_amount, max_amount).
+
+    min_percent - the minimum possible percentage of the balance for deposit
+    max_percent - the maximum possible percentage of the balance for deposit
+
+
+    all_amount - deposit from min_percent to max_percent
+    """
+
+    min_amount = 0.0001
+    max_amount = 0.0002
+    decimal = 5
+
+    make_withdraw = True
+    sleep_from = 300
+    sleep_to = 400
+
+    all_amount = True
+
+    min_percent = 43
+    max_percent = 60
+
+    aave_inst = Aave(wallet_info)
+    await aave_inst.router(
         min_amount, max_amount, decimal, sleep_from, sleep_to, make_withdraw, all_amount, min_percent, max_percent
     )
 
@@ -444,7 +546,7 @@ async def deposit_rocketsam(wallet_info):
     max_percent = 35
 
     rocketsam_inst = RocketSam(wallet_info)
-    await rocketsam_inst.deposit(
+    await rocketsam_inst.router(
         contracts, min_amount, max_amount, decimal, sleep_from, sleep_to,
         make_withdraw, all_amount, min_percent, max_percent
     )
@@ -492,7 +594,7 @@ async def bridge_nft_zerius(wallet_info):
     sleep_to = 120
 
     zerius_inst = Zerius(wallet_info)
-    await zerius_inst.bridge(chains, sleep_from, sleep_to)
+    await zerius_inst.mint_and_bridge(chains, sleep_from, sleep_to)
 
 
 async def mint_nft(wallet_info):
@@ -583,7 +685,7 @@ async def swap_tokens(wallet_info):
     """
 
     use_dex = [
-        "syncswap", "skydrome", "zebra"
+        "ambient"
     ]
 
     use_tokens = ["USDC"]
@@ -605,26 +707,26 @@ async def swap_multiswap(wallet_info):
     Multi-Swap module: Automatically performs the specified number of swaps in one of the dexes.
     ______________________________________________________
     use_dex - Choose any dex: syncswap, skydrome, zebra
-    quantity_swap - Quantity swaps
+    min_swap, max_swap - Quantity swaps
     ______________________________________________________
     random_swap_token - If True the swap path will be [ETH -> USDC -> USDC -> ETH] (random!)
     If False the swap path will be [ETH -> USDC -> ETH -> USDC]
     """
 
-    use_dex = ["syncswap", "skydrome", "zebra"]
+    use_dex = ["ambient"]
 
-    min_swap = 3
-    max_swap = 4
+    min_swap = 1
+    max_swap = 1
 
-    sleep_from = 3
-    sleep_to = 7
+    sleep_from = 200
+    sleep_to = 400
 
     slippage = 0.1
 
     random_swap_token = True
 
-    min_percent = 5
-    max_percent = 10
+    min_percent = 51
+    max_percent = 60
 
     multi = Multiswap(wallet_info)
     await multi.swap(
@@ -772,6 +874,11 @@ async def mint_zerius(wallet_info):
 async def withdraw_layerbank(wallet_info):
     layerbank_inst = LayerBank(wallet_info)
     await layerbank_inst.withdraw()
+
+
+async def withdraw_aave(wallet_info):
+    aave_inst = Aave(wallet_info)
+    await aave_inst.withdraw()
 
 
 async def send_mail(wallet_info):

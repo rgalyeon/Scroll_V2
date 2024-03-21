@@ -11,27 +11,19 @@ from .account import Account
 class RocketSam(Account):
     def __init__(self, wallet_info) -> None:
         super().__init__(wallet_info=wallet_info, chain="scroll")
+        self.current_contract = None
 
-    async def get_deposit_amount(self, contract: str):
-        contract = self.get_contract(self.w3.to_checksum_address(contract), ROCKETSAM_ABI)
-        amount = await contract.functions.balances(self.address).call()
-        return amount
+    async def router(self, contracts,
+                     min_amount,
+                     max_amount,
+                     decimal,
+                     sleep_from,
+                     sleep_to,
+                     make_withdraw,
+                     all_amount,
+                     min_percent,
+                     max_percent):
 
-    @retry
-    @check_gas
-    async def deposit(
-            self,
-            contracts: list,
-            min_amount: float,
-            max_amount: float,
-            decimal: int,
-            sleep_from: int,
-            sleep_to: int,
-            make_withdraw: bool,
-            all_amount: bool,
-            min_percent: int,
-            max_percent: int
-    ):
         amount_wei, amount, balance = await self.get_amount(
             "ETH",
             min_amount,
@@ -42,9 +34,24 @@ class RocketSam(Account):
             max_percent
         )
 
+        await self.deposit(contracts, amount_wei, amount, balance)
+        if make_withdraw:
+            await sleep(sleep_from, sleep_to)
+            await self.withdraw([self.current_contract], sleep_from, sleep_to)
+
+    async def get_deposit_amount(self, contract: str):
+        contract = self.get_contract(self.w3.to_checksum_address(contract), ROCKETSAM_ABI)
+        amount = await contract.functions.balances(self.address).call()
+        return amount
+
+    @retry
+    @check_gas
+    async def deposit(self, contracts: list, amount_wei, amount, balance):
+
         logger.info(f"[{self.account_id}][{self.address}] Deposit to RocketSam")
 
         contract = self.get_contract(self.w3.to_checksum_address(random.choice(contracts)), ROCKETSAM_ABI)
+        self.current_contract = contract.address
 
         fee = await contract.functions.estimateProtocolFee(amount_wei).call()
 
@@ -61,14 +68,9 @@ class RocketSam(Account):
 
         await self.wait_until_tx_finished(txn_hash.hex())
 
-        if make_withdraw:
-            await sleep(sleep_from, sleep_to)
-
-            await self.withdraw([contract.address], sleep_from, sleep_to)
-
     @retry
     @check_gas
-    async def withdraw(self, contracts: list, sleep_from: int, sleep_to: int):
+    async def withdraw(self, contracts: list, sleep_from, sleep_to):
         for _, contract in enumerate(contracts, start=1):
             amount = await self.get_deposit_amount(contract)
 
