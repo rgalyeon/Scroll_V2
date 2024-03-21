@@ -408,7 +408,7 @@ async def swap_syncswap(wallet_info):
 
 async def swap_ambient(wallet_info):
     """
-    Make swap on SyncSwap
+    Make swap on Ambient
     You can swap only ETH to any token or any token to ETH!
     ______________________________________________________
     Description: look at swap_skydrome description
@@ -706,8 +706,8 @@ async def swap_multiswap(wallet_info):
     """
     Multi-Swap module: Automatically performs the specified number of swaps in one of the dexes.
     ______________________________________________________
-    use_dex - Choose any dex: syncswap, skydrome, zebra
-    min_swap, max_swap - Quantity swaps
+    use_dex - Choose any dex: syncswap, skydrome, zebra, ambient
+    n_swaps_min, n_swaps_max - Quantity swaps
     ______________________________________________________
     random_swap_token - If True the swap path will be [ETH -> USDC -> USDC -> ETH] (random!)
     If False the swap path will be [ETH -> USDC -> ETH -> USDC]
@@ -715,8 +715,8 @@ async def swap_multiswap(wallet_info):
 
     use_dex = ["ambient"]
 
-    min_swap = 1
-    max_swap = 1
+    n_swaps_min = 1
+    n_swaps_max = 1
 
     sleep_from = 200
     sleep_to = 400
@@ -730,7 +730,7 @@ async def swap_multiswap(wallet_info):
 
     multi = Multiswap(wallet_info)
     await multi.swap(
-        use_dex, sleep_from, sleep_to, min_swap, max_swap, slippage, random_swap_token, min_percent, max_percent
+        use_dex, sleep_from, sleep_to, n_swaps_min, n_swaps_max, slippage, random_swap_token, min_percent, max_percent
     )
 
 

@@ -13,7 +13,7 @@ async def get_token_price(token_name: str, vs_currency: str = 'usd', proxy=None)
     }
 
     async with ClientSession() as session:
-        async with session.get(url, params=params) as response:
+        async with session.get(url, params=params, proxy=proxy) as response:
             if response.status == 200:
                 data = await response.json()
                 return float(data[token_name][vs_currency])
