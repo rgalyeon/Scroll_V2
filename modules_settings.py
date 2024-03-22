@@ -143,7 +143,8 @@ async def bridge_orbiter(wallet_info):
     from_chains – source chain - ethereum, polygon_zkevm, arbitrum, optimism, zksync | Select one or more
                   If more than one chain is specified, the software will check the balance in each network and
                   select the chain with the highest balance.
-    to_chain – destination chain - ethereum, polygon_zkevm, arbitrum, optimism, zksync | Select one
+    to_chains – destination chain - ethereum, polygon_zkevm, arbitrum, optimism, zksync | Select one or more
+                If more than one is specified, randomly selected
 
     min_amount - the minimum possible amount for sending
     max_amount - maximum possible amount to send
@@ -165,8 +166,8 @@ async def bridge_orbiter(wallet_info):
     sleep_between_transfers - only if bridge_from_all_chains=True. sleep between few transfers
     """
 
-    from_chains = ["arbitrum", "optimism", "base", "linea"]
-    to_chain = "scroll"
+    from_chains = ["arbitrum", "optimism", "base", "linea"]  # Chain with max balance will be selected
+    to_chain = ["scroll"]  # Randomly selected
 
     min_amount = 0.005
     max_amount = 0.0051
@@ -200,8 +201,8 @@ async def bridge_layerswap(wallet_info):
     Description: Look at bridge_orbiter description
     """
 
-    from_chains = ["base"]
-    to_chain = "scroll"
+    from_chains = ["base"]  # Chain with max balance will be selected
+    to_chain = ["scroll"]  # Randomly selected
 
     min_amount = 0.0002
     max_amount = 0.0003
@@ -235,8 +236,8 @@ async def bridge_nitro(wallet_info):
     Description: Look at bridge_orbiter description
     """
 
-    from_chains = ["optimism"]
-    to_chain = "scroll"
+    from_chains = ["optimism"]  # Chain with max balance will be selected
+    to_chain = ["scroll"]  # Randomly selected
 
     min_amount = 0.0002
     max_amount = 0.0003
@@ -772,6 +773,7 @@ async def custom_routes(wallet_info):
         – bridge_orbiter
         – bridge_layerswap
         - bridge_rhinofi
+        - bridge_nitro
     WRAP:
         – wrap_eth
         – unwrap_eth
@@ -779,11 +781,14 @@ async def custom_routes(wallet_info):
         – swap_skydrome
         – swap_syncswap
         – swap_zebra
+        - swap_ambient
     LANDING:
         – depost_layerbank
         – withdraw_layerbank
         – deposit_rocketsam
         – withdraw_rocketsam
+        - deposit_aave
+        - withdraw_aave
     NFT/DOMAIN:
         – mint_zerius
         - bridge_nft_zerius

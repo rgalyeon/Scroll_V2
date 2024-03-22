@@ -87,9 +87,12 @@ class Transfer(Account):
             min_amount: float, max_amount: float, decimal: int,
             all_amount: bool, min_percent: int, max_percent: int,
             save_funds: List[float], check_balance_on_dest: bool, check_amount: float,
-            min_required_amount: float, destination_chain: str = 'scroll',
+            min_required_amount: float, destination_chains: List[str] = None,
             bridge_from_all_chains: bool = False, sleep_between_transfers=None):
 
+        if not destination_chains:
+            destination_chains = ["scroll"]
+        destination_chain = random.choice(destination_chains)
         need_bridge = await self.check_balance_on_destination(check_balance_on_dest, destination_chain, check_amount)
         if not need_bridge:
             logger.info(
