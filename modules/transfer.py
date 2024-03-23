@@ -109,6 +109,7 @@ class Transfer(Account):
                 if wait_unlimited_time:
                     logger.info(f'[{self.account_id}][{self.address}] Waiting money for bridge')
                     await sleep(*sleep_between_attempts)
+                    continue
                 else:
                     logger.warning(f'[{self.account_id}][{self.address}] No chains with required balance. Skip module')
                     return
