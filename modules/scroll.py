@@ -30,7 +30,9 @@ class Scroll(Transfer):
             save_funds: List[float],
             check_balance_on_dest: bool,
             check_amount: float,
-            min_required_amount: float
+            min_required_amount: float,
+            wait_unlimited_time: bool,
+            sleep_between_attempts: List[int]
     ):
         self.bridge_logic = self.deposit_logic
 
@@ -40,7 +42,8 @@ class Scroll(Transfer):
                                 min_percent=min_percent, max_percent=max_percent,
                                 save_funds=save_funds, check_balance_on_dest=check_balance_on_dest,
                                 check_amount=check_amount,
-                                min_required_amount=min_required_amount, destination_chain=['scroll'])
+                                min_required_amount=min_required_amount, destination_chain=['scroll'],
+                                wait_unlimited_time=wait_unlimited_time, sleep_between_attempts=sleep_between_attempts)
 
     async def withdraw_logic(self, source_chain, destination_chain, amount_wei, amount, balance):
         logger.info(f"[{self.account_id}][{self.address}] Bridge from Scroll | {amount} ETH")
@@ -83,7 +86,8 @@ class Scroll(Transfer):
             min_amount: float, max_amount: float, decimal: int,
             all_amount: bool, min_percent: int, max_percent: int,
             save_funds: List[float], check_balance_on_dest: bool, check_amount: float,
-            min_required_amount: float
+            min_required_amount: float, wait_unlimited_time: bool,
+            sleep_between_attempts: List[int]
     ):
 
         self.bridge_logic = self.withdraw_logic
@@ -94,7 +98,8 @@ class Scroll(Transfer):
                                 min_percent=min_percent, max_percent=max_percent,
                                 save_funds=save_funds, check_balance_on_dest=check_balance_on_dest,
                                 check_amount=check_amount,
-                                min_required_amount=min_required_amount, destination_chain=['ethereum'])
+                                min_required_amount=min_required_amount, destination_chain=['ethereum'],
+                                wait_unlimited_time=wait_unlimited_time, sleep_between_attempts=sleep_between_attempts)
 
     @retry
     @check_gas

@@ -88,7 +88,8 @@ class Transfer(Account):
             all_amount: bool, min_percent: int, max_percent: int,
             save_funds: List[float], check_balance_on_dest: bool, check_amount: float,
             min_required_amount: float, destination_chains: List[str] = None,
-            bridge_from_all_chains: bool = False, sleep_between_transfers=None):
+            bridge_from_all_chains: bool = False, sleep_between_transfers=None,
+            wait_unlimited_time=False, sleep_between_attempts=(120, 300)):
 
         if not destination_chains:
             destination_chains = ["scroll"]
@@ -101,10 +102,18 @@ class Transfer(Account):
             )
             return
 
-        source_chains = await self.find_chains_with_max_balance(from_chains, min_required_amount)
-        if not source_chains:
-            logger.warning(f'[{self.account_id}][{self.address}] No chains with required balance. Skip module')
-            return
+        # wait unlimited time handle
+        while True:
+            source_chains = await self.find_chains_with_max_balance(from_chains, min_required_amount)
+            if not source_chains:
+                if wait_unlimited_time:
+                    logger.info(f'[{self.account_id}][{self.address}] Waiting money for bridge')
+                    await sleep(*sleep_between_attempts)
+                else:
+                    logger.warning(f'[{self.account_id}][{self.address}] No chains with required balance. Skip module')
+                    return
+            break
+
         for source_chain in source_chains:
             self.change_settings(source_chain)
 

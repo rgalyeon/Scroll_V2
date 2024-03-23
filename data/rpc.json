@@ -66,6 +66,7 @@
   },
   "scroll": {
     "rpc": [
+      "https://rpc.ankr.com/scroll",
       "https://rpc.scroll.io",
       "https://scroll.blockpi.network/v1/rpc/public"
     ],

@@ -39,10 +39,14 @@ async def deposit_scroll(wallet_info):
     save_funds = [0.0011, 0.0013]
     min_required_amount = 0
 
+    wait_unlimited_time = False
+    sleep_between_attempts = [120, 300]
+
     scroll_inst = Scroll(wallet_info)
     await scroll_inst.deposit(
         min_amount, max_amount, decimal, all_amount, min_percent, max_percent,
-        save_funds, check_balance_on_dest, check_amount, min_required_amount
+        save_funds, check_balance_on_dest, check_amount, min_required_amount,
+        wait_unlimited_time, sleep_between_attempts
     )
 
 
@@ -67,10 +71,14 @@ async def withdraw_scroll(wallet_info):
     save_funds = [0.0011, 0.0013]
     min_required_amount = 0
 
+    wait_unlimited_time = False
+    sleep_between_attempts = [120, 300]  # min, max
+
     scroll_inst = Scroll(wallet_info)
     await scroll_inst.withdraw(
         min_amount, max_amount, decimal, all_amount, min_percent, max_percent,
-        save_funds, check_balance_on_dest, check_amount, min_required_amount
+        save_funds, check_balance_on_dest, check_amount, min_required_amount, wait_unlimited_time,
+        sleep_between_attempts
     )
 
 
@@ -87,6 +95,8 @@ async def withdraw_okx(wallet_info):
     skip_enabled - If True, the skip_threshold check will be applied; otherwise, it will be ignored
     skip_threshold - If skip_enabled is True and the wallet balance is greater than or equal to this threshold,
                      skip the withdrawal
+    wait_unlimited_time - the software will wait indefinitely for funds on the OKX
+    sleep_between_attempts - minimum-maximum delay between balance checks (if wait_unlimited_time - True)
     """
     token = 'ETH'
     chains = ['arbitrum', 'zksync', 'linea', 'base', 'optimism']
@@ -100,7 +110,7 @@ async def withdraw_okx(wallet_info):
     skip_threshold = 0.00327
 
     wait_unlimited_time = False
-    sleep_between_attempts = [10, 20]  # min, max
+    sleep_between_attempts = [200, 300]  # min, max
 
     okx_exchange = Okx(wallet_info, chains)
     await okx_exchange.okx_withdraw(
@@ -127,12 +137,17 @@ async def transfer_to_okx(wallet_info):
     bridge_from_all_chains = True
     sleep_between_transfers = [120, 350]
 
+    wait_unlimited_time = False
+    sleep_between_attempts = [200, 300]  # min, max
+
     transfer_inst = Transfer(wallet_info)
     await transfer_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent,
         max_percent, save_funds, False, 0, min_required_amount,
         bridge_from_all_chains=bridge_from_all_chains,
-        sleep_between_transfers=sleep_between_transfers
+        sleep_between_transfers=sleep_between_transfers,
+        wait_unlimited_time=wait_unlimited_time,
+        sleep_between_attempts=sleep_between_attempts
     )
 
 
@@ -164,6 +179,8 @@ async def bridge_orbiter(wallet_info):
                           if there is no network with the required balance, the bridge will not be made
     bridge_from_all_chains - if True, will be produced from all chains specified in the parameter from_chains
     sleep_between_transfers - only if bridge_from_all_chains=True. sleep between few transfers
+    wait_unlimited_time - the software will wait indefinitely for funds on the wallet in the source chain
+    sleep_between_attempts - minimum-maximum delay between balance checks (if wait_unlimited_time - True)
     """
 
     from_chains = ["arbitrum", "optimism", "base", "linea"]  # Chain with max balance will be selected
@@ -186,11 +203,15 @@ async def bridge_orbiter(wallet_info):
     bridge_from_all_chains = False
     sleep_between_transfers = [120, 300]
 
+    wait_unlimited_time = False
+    sleep_between_attempts = [200, 300]  # min, max
+
     orbiter_inst = Orbiter(wallet_info)
     await orbiter_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
-        sleep_between_transfers=sleep_between_transfers
+        sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
+        sleep_between_attempts=sleep_between_attempts
     )
 
 
@@ -221,11 +242,15 @@ async def bridge_layerswap(wallet_info):
     bridge_from_all_chains = False
     sleep_between_transfers = [120, 300]
 
+    wait_unlimited_time = False
+    sleep_between_attempts = [200, 300]  # min, max
+
     layerswap_inst = LayerSwap(wallet_info=wallet_info)
     await layerswap_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
-        sleep_between_transfers=sleep_between_transfers
+        sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
+        sleep_between_attempts=sleep_between_attempts
     )
 
 
@@ -256,11 +281,15 @@ async def bridge_nitro(wallet_info):
     bridge_from_all_chains = False
     sleep_between_transfers = [120, 300]
 
+    wait_unlimited_time = False
+    sleep_between_attempts = [200, 300]  # min, max
+
     nitro_inst = Nitro(wallet_info=wallet_info)
     await nitro_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
-        sleep_between_transfers=sleep_between_transfers
+        sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
+        sleep_between_attempts=sleep_between_attempts
     )
 
 
@@ -838,13 +867,13 @@ async def automatic_routes(wallet_info):
     """
 
     transaction_count = 15
-    cheap_ratio = 0.95
+    cheap_ratio = 1
 
-    sleep_from = 30000
-    sleep_to = 70000
+    sleep_from = 20000
+    sleep_to = 56000
 
     use_none = True
-    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, check_in_secondlive]
+    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, check_in_secondlive, mint_nft, owlto_check_in]
     expensive_modules = [create_omnisea, create_safe, mint_zerius]
 
     routes_inst = Routes(wallet_info)
