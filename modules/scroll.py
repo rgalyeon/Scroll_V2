@@ -62,24 +62,26 @@ class Scroll(Transfer):
 
     async def deposit_logic(self, source_chain, destination_chain, amount_wei, amount, balance):
         logger.info(f"[{self.account_id}][{self.address}] Bridge to Scroll | {amount} ETH")
-
+        print(amount_wei, amount_wei / 10 ** 18)
         contract = self.get_contract(BRIDGE_CONTRACTS["deposit"], DEPOSIT_ABI)
         contract_oracle = self.get_contract(BRIDGE_CONTRACTS["oracle"], ORACLE_ABI)
 
-        fee = await contract_oracle.functions.estimateCrossDomainMessageFee(168000).call()
+        if await self.w3.eth.get_balance(self.address) > amount_wei:
+            fee = await contract_oracle.functions.estimateCrossDomainMessageFee(168000).call()
 
-        tx_data = await self.get_tx_data(amount_wei + fee)
+            tx_data = await self.get_tx_data(amount_wei + fee)
+            transaction = await contract.functions.depositETH(
+                amount_wei,
+                168000,
+            ).build_transaction(tx_data)
 
-        transaction = await contract.functions.depositETH(
-            amount_wei,
-            168000,
-        ).build_transaction(tx_data)
+            signed_txn = await self.sign(transaction)
 
-        signed_txn = await self.sign(transaction)
+            txn_hash = await self.send_raw_transaction(signed_txn)
 
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+            await self.wait_until_tx_finished(txn_hash.hex())
+        else:
+            raise ValueError('Insufficient funds')
 
     async def withdraw(
             self,
