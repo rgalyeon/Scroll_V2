@@ -56,7 +56,8 @@ async def wait_gas(request_kwargs):
     while True:
         try:
             gas = await get_gas(request_kwargs)
-
+            if gas is None:
+                gas = await get_gas({})
             max_gwei = get_max_gwei_user_settings()
             if gas > max_gwei:
                 logger.info(f'Current GWEI: {gas} > {max_gwei}')
