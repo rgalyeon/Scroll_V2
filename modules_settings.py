@@ -26,10 +26,10 @@ async def deposit_scroll(wallet_info):
     """
 
     min_amount = 0.001
-    max_amount = 0.002
+    max_amount = 0.003
     decimal = 4
 
-    all_amount = True
+    all_amount = False
 
     min_percent = 1
     max_percent = 1
@@ -293,6 +293,44 @@ async def bridge_nitro(wallet_info):
     )
 
 
+async def bridge_nitro2(wallet_info):
+    """
+    Bridge from Nitro
+    ______________________________________________________
+    Description: Look at bridge_orbiter description
+    """
+    from_chains = ["scroll"]
+    to_chain = ["arbitrum", "optimism"]
+
+    min_amount = 0.0002
+    max_amount = 0.0003
+    decimal = 6
+
+    all_amount = True
+
+    min_percent = 100
+    max_percent = 100
+
+    check_balance_on_dest = True
+    check_amount = 3.005
+    save_funds = [0.007, 0.01]
+    min_required_amount = 0.1
+
+    bridge_from_all_chains = False
+    sleep_between_transfers = [120, 300]
+
+    wait_unlimited_time = True
+    sleep_between_attempts = [200, 300]  # min, max
+
+    nitro_inst = Nitro(wallet_info=wallet_info)
+    await nitro_inst.transfer_eth(
+        from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
+        check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
+        sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
+        sleep_between_attempts=sleep_between_attempts
+    )
+
+
 async def wrap_eth(wallet_info):
     """
     Wrap ETH
@@ -439,7 +477,7 @@ async def swap_syncswap(wallet_info):
 async def swap_ambient(wallet_info):
     """
     Make swap on Ambient
-    You can swap only ETH to any token or any token to ETH!
+    You can swap only ETH to USDC or USDC to ETH!
     ______________________________________________________
     Description: look at swap_skydrome description
     """
@@ -528,12 +566,12 @@ async def deposit_aave(wallet_info):
     decimal = 5
 
     make_withdraw = True
-    sleep_from = 300
-    sleep_to = 400
+    sleep_from = 3650
+    sleep_to = 10000
 
     all_amount = True
 
-    min_percent = 43
+    min_percent = 30
     max_percent = 60
 
     aave_inst = Aave(wallet_info)
@@ -723,7 +761,7 @@ async def swap_tokens(wallet_info):
     sleep_from = 1
     sleep_to = 5
 
-    slippage = 0.1
+    slippage = 1
 
     min_percent = 100
     max_percent = 100
@@ -751,7 +789,7 @@ async def swap_multiswap(wallet_info):
     sleep_from = 200
     sleep_to = 400
 
-    slippage = 0.1
+    slippage = 1
 
     random_swap_token = True
 
@@ -832,6 +870,8 @@ async def custom_routes(wallet_info):
         – deploy_contract
         - vote_rubyscore
         - check_in_secondlive
+
+    If random_module = True and withdraw_okx in use_modules, withdraw_okx will always be executed first
     ______________________________________________________
     Disclaimer - You can add modules to [] to select random ones,
     example [module_1, module_2, [module_3, module_4], module 5]
@@ -843,7 +883,7 @@ async def custom_routes(wallet_info):
     example (send_mail, 1, 10) run this module 1 to 10 times
     """
 
-    use_modules = [transfer_to_okx]
+    use_modules = [withdraw_okx, automatic_routes]
 
     sleep_from = 30
     sleep_to = 60
@@ -874,7 +914,7 @@ async def automatic_routes(wallet_info):
 
     use_none = True
     cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, check_in_secondlive, mint_nft, owlto_check_in]
-    expensive_modules = [create_omnisea, create_safe, mint_zerius]
+    expensive_modules = [create_omnisea, create_safe, mint_zerius, deposit_aave]
 
     routes_inst = Routes(wallet_info)
     await routes_inst.start_automatic(transaction_count, cheap_ratio,

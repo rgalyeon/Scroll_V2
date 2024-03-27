@@ -70,6 +70,10 @@ class Routes(Account):
 
         if random_module:
             random.shuffle(run_modules)
+            for i, func in enumerate(run_modules):
+                if func.__name__ == 'withdraw_okx':
+                    run_modules.insert(0, run_modules.pop(i))
+                    break
 
         for module in run_modules:
             if module is None:

@@ -107,7 +107,8 @@ class Transfer(Account):
             source_chains = await self.find_chains_with_max_balance(from_chains, min_required_amount)
             if not source_chains:
                 if wait_unlimited_time:
-                    logger.info(f'[{self.account_id}][{self.address}] Waiting money for bridge')
+                    logger.info(f'[{self.account_id}][{self.address}] Waiting money for bridge '
+                                f'[{self.__class__.__name__}]')
                     await sleep(*sleep_between_attempts)
                     continue
                 else:

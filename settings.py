@@ -8,10 +8,14 @@ USE_PROXY = True
 SLEEP_FROM = 1500  # Second
 SLEEP_TO = 3600  # Second
 
-QUANTITY_THREADS = 50
+# Sleep after a transaction has been executed. Blocks threads so that wallets do not make a transaction in 1 second.
+SLEEP_AFTER_TX_FROM = 60
+SLEEP_AFTER_TX_TO = 120
 
-THREAD_SLEEP_FROM = 4000
-THREAD_SLEEP_TO = 8000
+QUANTITY_THREADS = 1
+
+THREAD_SLEEP_FROM = 3600
+THREAD_SLEEP_TO = 7200
 
 # GWEI CONTROL MODE
 CHECK_GWEI = True  # True/False

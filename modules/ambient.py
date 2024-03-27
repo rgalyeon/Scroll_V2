@@ -1,8 +1,7 @@
 from loguru import logger
-from config import AMBIENT_CONTRACT, AMBIENT_ABI, SCROLL_TOKENS, ZERO_ADDRESS, COINGECKO_TOKEN_API_NAMES
+from config import AMBIENT_CONTRACT, AMBIENT_ABI, SCROLL_TOKENS, ZERO_ADDRESS
 from utils.gas_checker import check_gas
 from utils.helpers import retry
-from utils.coingecko import get_token_price
 from .account import Account
 from eth_abi import abi
 
@@ -14,16 +13,27 @@ class Ambient(Account):
         self.contract = self.get_contract(AMBIENT_CONTRACT, AMBIENT_ABI)
 
     async def get_min_amount_out(self, from_token_name, to_token_name, from_token_amount, slippage):
+        if from_token_name in {'ETH', 'USDC'} and to_token_name in {'USDC', 'ETH'}:
+            abi_ = [{"inputs": [], "name": "latestAnswer", "outputs":
+                    [{"internalType": "int256", "name": "", "type": "int256"}],
+                    "stateMutability": "view", "type": "function"}]
+            w3 = self.get_w3('ethereum')
+            contract = w3.eth.contract(address=w3.to_checksum_address('0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419'),
+                                       abi=abi_)
+            eth_price = await contract.functions.latestAnswer().call() / 10 ** 8
 
-        api_names = COINGECKO_TOKEN_API_NAMES
-        amount_in_usd = (await get_token_price(api_names[from_token_name])) * from_token_amount
-        min_amount_out = (amount_in_usd / await get_token_price(api_names[to_token_name]))
+            prices = {'ETH': eth_price, 'USDC': 1}
+            amount_in_usd = prices[from_token_name] * float(from_token_amount)
+            min_amount_out = (amount_in_usd / prices[to_token_name])
 
-        decimals = 18 if to_token_name == 'ETH' else (await self.get_balance(SCROLL_TOKENS[to_token_name]))['decimal']
+            decimals = 18 if to_token_name == 'ETH' else (await self.get_balance(SCROLL_TOKENS[to_token_name]))[
+                'decimal']
 
-        min_amount_out_in_wei = self.w3.to_wei(min_amount_out, 'ether' if decimals == 18 else 'mwei')
+            min_amount_out_in_wei = self.w3.to_wei(min_amount_out, 'ether' if decimals == 18 else 'mwei')
 
-        return int(min_amount_out_in_wei - (min_amount_out_in_wei / 100 * slippage))
+            return int(min_amount_out_in_wei - (min_amount_out_in_wei / 100 * slippage))
+        else:
+            raise ValueError('Supported only ETH and USDC')
 
     @retry
     @check_gas
@@ -81,7 +91,6 @@ class Ambient(Account):
                 reserve_flags
             ]
         )
-        # 0x00000000000000000000000024f929c268b4cf334b00e32b2b3709531b356bb2 000000000000000000000000000000000000000000000000000000000a8e0af2 00000000000000000000000006efdbff2a14a7c8e15944d1f4a48f9f95f663a4
 
         tx_data = await self.get_tx_data(value=amount_wei if from_token == 'ETH' else 0)
         transaction = await self.contract.functions.userCmd(
@@ -92,4 +101,3 @@ class Ambient(Account):
         signed_txn = await self.sign(transaction)
         txn_hash = await self.send_raw_transaction(signed_txn)
         await self.wait_until_tx_finished(txn_hash.hex())
-
