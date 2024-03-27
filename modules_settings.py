@@ -680,6 +680,42 @@ async def mint_nft(wallet_info):
         ('0x5128ED5C206eBb80068E13f058ba476F27449C26', 'mint'),  # not onchain identity
         ('0xd20F23a8BbBE6e5B63D97b1a94Cc2E111706FB98', 'mint'),  # Autumn zorb
         ('0xE1C60ae5EA9171ABE3FCD3f0Fd8007918e1f961F', 'mint'),  # Not eligible
+        ('0xbBa247dCD53af0432511Ae173Ac6e1700B8cC77c', 'mintRandomTo'),  # bull hammer
+        ('0x3490e1ecdcbBFBf7f728B65b87199181C5E30c44', 'mint'),  # nastyCat
+        ('0x93B99D89AB4F46431cF3D71DD68E431C844A64DC', 'mint'),  # kittyCat
+        ('0x1E915a166db76C44ED8FE12F97C4e3b65c2C2629', 'mint'),  # dandy
+        ('0xDB9577Ef2Cd8360b3e34aEc7b700AD0894Dc68b7', 'mint'),  # kateVG
+        ('0x48BD80a8e60aAa91FD36fb00707590368C9E4468', 'mint'),  # nancyTON1
+        ('0x31dCD2726d46550C8162cCB23DA5B9b108906a5f', 'mint'),  # b560
+        ('0x28ee739580941e7EbBc3D6e337c3080025A5975E', 'mint'),  # AndyEn2
+        ('0xC5c3738Dc94E2395C7afF8a1b5aA322B3465496B', 'mint'),  # alvar1
+        ('0x4984E05E77457B9e7c1143D651A2c40Ff6138219', 'mint'),  # ksi2
+        ('0x754F3e6E2651e6Cc907B856A6a5592EC6094E4aa', 'mint'),  # ksu002
+        ('0xafdEAAd25fB47fBc2151357504292530d89b7A75', 'mint'),  # Anny
+        ('0x2a826Ad1a9a7830C25B4988EF444Cd0710B7A61e', 'mint'),  # danny2
+        ('0xa8A1876100A5C4f9c1CC18efD3e4acABB8779648', 'mint'),  # howardtens
+        ('0x528366eBEc17E348Dcf29Db66422F68ae8a7E310', 'mint'),  # kelly3
+        ('0x44CD8b5782d690173010D81eD7fe679A28729b6c', 'mint'),  # bubble3
+        ('0x07DEe49894bBDc900eD723556Eabfb0fcbd79A1C', 'mint'),  # Drone
+        ('0xe712378C3aeF1D4054c56da020D4eA75Bff76c66', 'mint'),  # Anny
+        ('0x6be4b2630da4B5EBeE9C20aD7B996578d0337FbE', 'mint'),  # Marty0
+        ('0x90183dFb9dFD684Cd05579787B8A95AE073cbCe2', 'mint'),  # Alex
+        ('0x7EdcC98a327178b21CA372156c5fde196a09BE5C', 'mint'),  # Grey
+        ('0x2cb36f4D93EE27362A63F99C4E55133b1F56Fe5f', 'mint'),  # Anakin2
+        ('0xBf214C36B82d5aFa0Ed52C93DdFf692FFfB147b0', 'mint'),  # Bran2
+        ('0xed50b8A648dE7241f39Cf9EEc2d471d6588a7B16', 'mint'),  # Stark00
+        ('0xC42706B43168dA0161a8970f99689A2edC10Dd7B', 'mint'),  # Sansa
+        ('0xC6bcd4D8c85DC5eA9D78F28D0C69E5128A5e824e', 'mint'),  # Deer
+        ('0x67dA10157415ac1f30AE152fEA6DF1366158B551', 'mint'),  # Sticker0
+        ('0x9e866bc18604CBFeF6B14A4839dd0883Ac08340f', 'mint'),  # PZ
+        ('0x7b1eA7f264eD0c1eeB9AE66a781705b106742C46', 'mint'),  # Hq
+        ('0xcd9B72eAE740eE25dF617a4770Ec6d197Bb484b1', 'mint'),  # deer
+        ('0x487E0880053e3Ad39C40a7B33eF0d10213ef50e5', 'mint'),  # Moon
+        ('0x815E3459dE519b83E3762e73D52f2a41f0Be5fDf', 'mint'),  # Fox2
+        ('0xc1Ff98171a47A2b7C307A601fed5Fc119d318795', 'mint'),  # BF
+        ('0x2Ed8134a906670613B90C2883Bc7BB05Af2b495a', 'mint'),  # Next
+        ('0xE4873F3724b944c0D1dB6893715FA6BFD3b16E93', 'mint'),  # Sun
+        ('0x364964a596eA8C30E8a9038491b3e7991C813D83', 'mint')  # Eat
     ]
 
     minter = Minter(wallet_info)
