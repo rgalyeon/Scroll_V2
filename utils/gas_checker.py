@@ -37,10 +37,11 @@ def get_max_gwei_user_settings():
     return max_gwei
 
 
-async def get_gas():
+async def get_gas(request_kwargs):
     try:
         w3 = AsyncWeb3(
-            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC["ethereum"]["rpc"])),
+            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC["ethereum"]["rpc"]),
+                                        request_kwargs=request_kwargs),
             modules={"eth": (AsyncEth,)},
         )
         gas_price = await w3.eth.gas_price
@@ -50,11 +51,11 @@ async def get_gas():
         logger.error(error)
 
 
-async def wait_gas():
+async def wait_gas(request_kwargs):
     logger.info("Get GWEI")
     while True:
         try:
-            gas = await get_gas()
+            gas = await get_gas(request_kwargs)
 
             max_gwei = get_max_gwei_user_settings()
             if gas > max_gwei:
@@ -72,7 +73,7 @@ def check_gas(func):
     async def _wrapper(*args, **kwargs):
         with transaction_lock:
             if CHECK_GWEI:
-                await wait_gas()
+                await wait_gas(args[0].request_kwargs)
             result = await func(*args, **kwargs)
             if CHECK_GWEI:
                 await sleep(SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO)
