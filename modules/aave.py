@@ -21,7 +21,8 @@ class Aave(Account):
                      make_withdraw,
                      all_amount,
                      min_percent,
-                     max_percent):
+                     max_percent,
+                     required_amount_for_withdraw):
 
         amount_wei, amount, balance = await self.get_amount(
             "ETH",
@@ -36,7 +37,7 @@ class Aave(Account):
         await self.deposit(amount_wei, amount, balance)
         if make_withdraw:
             await sleep(sleep_from, sleep_to)
-            await self.withdraw()
+            await self.withdraw(required_amount_for_withdraw)
 
     @retry
     @check_gas
@@ -65,9 +66,13 @@ class Aave(Account):
 
     @retry
     @check_gas
-    async def withdraw(self):
+    async def withdraw(self, required_amount_for_withdraw):
         amount = await self.get_deposit_amount()
         balance = self.w3.from_wei(amount, 'ether')
+
+        if balance < required_amount_for_withdraw:
+            logger.info(f"[{self.account_id}][{self.address}] Skip withdraw {balance} ETH from Aave")
+            return
 
         if amount > 0:
             logger.info(

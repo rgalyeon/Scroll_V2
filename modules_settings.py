@@ -528,6 +528,8 @@ async def deposit_aave(wallet_info):
     decimal = 5
 
     make_withdraw = True
+    required_amount_for_withdraw = 0.005
+
     sleep_from = 3650
     sleep_to = 10000
 
@@ -538,8 +540,16 @@ async def deposit_aave(wallet_info):
 
     aave_inst = Aave(wallet_info)
     await aave_inst.router(
-        min_amount, max_amount, decimal, sleep_from, sleep_to, make_withdraw, all_amount, min_percent, max_percent
+        min_amount, max_amount, decimal, sleep_from, sleep_to, make_withdraw, all_amount, min_percent, max_percent,
+        required_amount_for_withdraw
     )
+
+
+async def withdraw_aave(wallet_info):
+    required_amount_for_withdraw = 0.005
+
+    aave_inst = Aave(wallet_info)
+    await aave_inst.withdraw(required_amount_for_withdraw)
 
 
 async def deposit_rocketsam(wallet_info):
@@ -946,11 +956,6 @@ async def mint_zerius(wallet_info):
 async def withdraw_layerbank(wallet_info):
     layerbank_inst = LayerBank(wallet_info)
     await layerbank_inst.withdraw()
-
-
-async def withdraw_aave(wallet_info):
-    aave_inst = Aave(wallet_info)
-    await aave_inst.withdraw()
 
 
 async def send_mail(wallet_info):
