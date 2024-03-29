@@ -7,8 +7,8 @@ from .transfer import Transfer
 
 
 class Orbiter(Transfer):
-    def __init__(self, wallet_info) -> None:
-        super().__init__(wallet_info)
+    def __init__(self, wallet_info, from_chains=None) -> None:
+        super().__init__(wallet_info, from_chains)
 
         self.chain_ids = {
             "ethereum": "1",

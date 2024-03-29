@@ -13,6 +13,7 @@ from loguru import logger
 import json
 from utils.sleeping import sleep
 from main import transaction_lock
+from functools import wraps
 
 
 def get_max_gwei_user_settings():
@@ -51,11 +52,11 @@ async def get_gas(request_kwargs):
         logger.error(error)
 
 
-async def wait_gas(request_kwargs):
+async def wait_gas(account):
     logger.info("Get GWEI")
     while True:
         try:
-            gas = await get_gas(request_kwargs)
+            gas = await get_gas(account.request_kwargs)
             if gas is None:
                 gas = await get_gas({})
             max_gwei = get_max_gwei_user_settings()
@@ -71,10 +72,11 @@ async def wait_gas(request_kwargs):
 
 
 def check_gas(func):
+    @wraps(func)
     async def _wrapper(*args, **kwargs):
         with transaction_lock:
             if CHECK_GWEI:
-                await wait_gas(args[0].request_kwargs)
+                await wait_gas(args[0])
             result = await func(*args, **kwargs)
             if CHECK_GWEI:
                 await sleep(SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO)

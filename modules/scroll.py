@@ -35,7 +35,7 @@ class Scroll(Transfer):
             sleep_between_attempts: List[int]
     ):
         self.bridge_logic = self.deposit_logic
-
+        self.chain = 'ethereum'
         await self.transfer_eth(from_chains=['ethereum'],
                                 min_amount=min_amount, max_amount=max_amount,
                                 decimal=decimal, all_amount=all_amount,
@@ -93,7 +93,7 @@ class Scroll(Transfer):
     ):
 
         self.bridge_logic = self.withdraw_logic
-
+        self.chain = 'scroll'
         await self.transfer_eth(from_chains=['scroll'],
                                 min_amount=min_amount, max_amount=max_amount,
                                 decimal=decimal, all_amount=all_amount,

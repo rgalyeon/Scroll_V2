@@ -120,7 +120,7 @@ class Account:
 
         allowance_amount = await self.check_allowance(token_address, contract_address)
 
-        if amount > allowance_amount or amount == 0:
+        if amount > allowance_amount or (allowance_amount > 0 and amount == 0):
             logger.success(f"[{self.account_id}][{self.address}] Make approve")
 
             approve_amount = 2 ** 128 if amount > allowance_amount else 0
@@ -140,7 +140,7 @@ class Account:
 
             await sleep(5, 20)
 
-    async def wait_until_tx_finished(self, hash: str, max_wait_time=180) -> None:
+    async def wait_until_tx_finished(self, hash: str, max_wait_time=300) -> None:
         start_time = time.time()
         while True:
             try:
@@ -162,8 +162,12 @@ class Account:
 
     async def sign(self, transaction) -> Any:
         if RPC[self.chain]["eip1559"]:
-            max_priority_fee_per_gas = int(await self.get_priority_fee() * GAS_MULTIPLIER)
-            max_fee_per_gas = await self.w3.eth.gas_price
+            max_priority_fee_per_gas = await self.get_priority_fee()
+            base_fee = await self.w3.eth.gas_price
+            max_fee_per_gas = base_fee + max_priority_fee_per_gas * GAS_MULTIPLIER
+
+            if max_priority_fee_per_gas > max_fee_per_gas:
+                max_priority_fee_per_gas = int(max_fee_per_gas * 0.95)
 
             transaction.update(
                 {
@@ -198,7 +202,7 @@ class Account:
         return w3.from_wei(balance_wei, 'ether')
 
     async def get_priority_fee(self) -> int:
-        fee_history = await self.w3.eth.fee_history(25, 'latest', [20.0])
+        fee_history = await self.w3.eth.fee_history(5, 'latest', [20.0])
         non_empty_block_priority_fees = [fee[0] for fee in fee_history["reward"] if fee[0] != 0]
 
         divisor_priority = max(len(non_empty_block_priority_fees), 1)

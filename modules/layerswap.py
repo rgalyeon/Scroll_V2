@@ -8,8 +8,8 @@ from .transfer import Transfer
 
 
 class LayerSwap(Transfer):
-    def __init__(self, wallet_info) -> None:
-        super().__init__(wallet_info=wallet_info)
+    def __init__(self, wallet_info, from_chains=None) -> None:
+        super().__init__(wallet_info=wallet_info, from_chains=from_chains)
 
         self.networks = {
             "ethereum": "ETHEREUM_MAINNET",

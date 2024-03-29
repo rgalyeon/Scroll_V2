@@ -140,7 +140,7 @@ async def transfer_to_okx(wallet_info):
     wait_unlimited_time = False
     sleep_between_attempts = [200, 300]  # min, max
 
-    transfer_inst = Transfer(wallet_info)
+    transfer_inst = Transfer(wallet_info, from_chains=from_chains)
     await transfer_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent,
         max_percent, save_funds, False, 0, min_required_amount,
@@ -206,7 +206,7 @@ async def bridge_orbiter(wallet_info):
     wait_unlimited_time = False
     sleep_between_attempts = [200, 300]  # min, max
 
-    orbiter_inst = Orbiter(wallet_info)
+    orbiter_inst = Orbiter(wallet_info, from_chains=from_chains)
     await orbiter_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
@@ -245,7 +245,7 @@ async def bridge_layerswap(wallet_info):
     wait_unlimited_time = False
     sleep_between_attempts = [200, 300]  # min, max
 
-    layerswap_inst = LayerSwap(wallet_info=wallet_info)
+    layerswap_inst = LayerSwap(wallet_info=wallet_info, from_chains=from_chains)
     await layerswap_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
@@ -284,45 +284,7 @@ async def bridge_nitro(wallet_info):
     wait_unlimited_time = False
     sleep_between_attempts = [200, 300]  # min, max
 
-    nitro_inst = Nitro(wallet_info=wallet_info)
-    await nitro_inst.transfer_eth(
-        from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
-        check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
-        sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
-        sleep_between_attempts=sleep_between_attempts
-    )
-
-
-async def bridge_nitro2(wallet_info):
-    """
-    Bridge from Nitro
-    ______________________________________________________
-    Description: Look at bridge_orbiter description
-    """
-    from_chains = ["scroll"]
-    to_chain = ["arbitrum", "optimism"]
-
-    min_amount = 0.0002
-    max_amount = 0.0003
-    decimal = 6
-
-    all_amount = True
-
-    min_percent = 100
-    max_percent = 100
-
-    check_balance_on_dest = True
-    check_amount = 3.005
-    save_funds = [0.007, 0.01]
-    min_required_amount = 0.1
-
-    bridge_from_all_chains = False
-    sleep_between_transfers = [120, 300]
-
-    wait_unlimited_time = True
-    sleep_between_attempts = [200, 300]  # min, max
-
-    nitro_inst = Nitro(wallet_info=wallet_info)
+    nitro_inst = Nitro(wallet_info=wallet_info, from_chains=from_chains)
     await nitro_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
@@ -942,14 +904,14 @@ async def automatic_routes(wallet_info):
     use_none - adds probability to skip module execution
     """
 
-    transaction_count = 15
+    transaction_count = 6
     cheap_ratio = 1
 
-    sleep_from = 20000
-    sleep_to = 56000
+    sleep_from = 1500
+    sleep_to = 3600
 
     use_none = True
-    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, check_in_secondlive, mint_nft, owlto_check_in]
+    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, mint_nft, check_in_secondlive]
     expensive_modules = [create_omnisea, create_safe, mint_zerius, deposit_aave]
 
     routes_inst = Routes(wallet_info)

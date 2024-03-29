@@ -34,6 +34,6 @@ class Minter(Account):
                 txn_hash = await self.send_raw_transaction(signed_txn)
                 await self.wait_until_tx_finished(txn_hash.hex())
                 break
-            nfts.remove(contr)
+            nfts.remove((contr, method))
         else:
             logger.info(f"[{self.account_id}][{self.address}] All nfts minted. Skip module")

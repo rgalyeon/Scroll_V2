@@ -10,8 +10,9 @@ from utils.gas_checker import check_gas
 
 
 class Transfer(Account):
-    def __init__(self, wallet_info):
-        super().__init__(wallet_info=wallet_info, chain='scroll')
+    def __init__(self, wallet_info, from_chains=None):
+        chain = 'scroll' if not from_chains or 'scroll' in from_chains else 'ethereum'
+        super().__init__(wallet_info=wallet_info, chain=chain)
 
     async def find_chains_with_max_balance(self, chains: List[str], min_required_amount):
         source_chains = []

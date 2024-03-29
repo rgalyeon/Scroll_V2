@@ -5,8 +5,8 @@ from config import RPC
 
 
 class Nitro(Transfer):
-    def __init__(self, wallet_info) -> None:
-        super().__init__(wallet_info)
+    def __init__(self, wallet_info, from_chains) -> None:
+        super().__init__(wallet_info, from_chains=from_chains)
 
     async def get_quote(self, amount: int, destination_chain: str):
         url = "https://api-beta.pathfinder.routerprotocol.com/api/v2/quote"
