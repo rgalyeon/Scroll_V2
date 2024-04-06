@@ -2,9 +2,11 @@ from loguru import logger
 from settings import RETRY_COUNT
 from utils.sleeping import sleep
 import traceback
+from functools import wraps
 
 
 def retry(func):
+    @wraps(func)
     async def wrapper(*args, **kwargs):
         retries = 0
         while retries <= RETRY_COUNT:
