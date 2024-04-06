@@ -63,6 +63,25 @@ class Routes(Account):
             return [random.choice(cheap_modules + ([None] if use_none else [])),
                     self.generate_nested_module(cheap_modules, use_none)]
 
+    @staticmethod
+    def fix_modules(modules):
+        pairs = [('deposit_layerbank', 'withdraw_layerbank'),
+                 ('deposit_aave', 'withdraw_aave'),
+                 ('wrap_eth', 'unwrap_eth')]
+
+        tasks = set()
+        for pair in pairs:
+            tasks.update(pair)
+        modules_idx = {}
+        for i, module in enumerate(modules):
+            if module.__name__ in tasks:
+                modules_idx[module.__name__] = i
+
+        for main, bonus in pairs:
+            if main in modules_idx and bonus in modules_idx and modules_idx[main] > modules_idx[bonus]:
+                main_idx, bonus_idx = modules_idx[main], modules_idx[bonus]
+                modules[main_idx], modules[bonus_idx] = modules[bonus_idx], modules[main_idx]
+
     async def start(self, use_modules: list, sleep_from: int, sleep_to: int, random_module: bool):
         logger.info(f"[{self.account_id}][{self.address}] Start using routes")
 
@@ -70,10 +89,16 @@ class Routes(Account):
 
         if random_module:
             random.shuffle(run_modules)
+
             for i, func in enumerate(run_modules):
                 if func.__name__ == 'withdraw_okx':
                     run_modules.insert(0, run_modules.pop(i))
-                    break
+
+            for i, func in enumerate(run_modules):
+                if func.__name__ == 'transfer_to_okx':
+                    run_modules.append(run_modules.pop(i))
+
+        self.fix_modules(run_modules)
 
         for module in run_modules:
             if module is None:

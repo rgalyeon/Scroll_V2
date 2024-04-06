@@ -878,8 +878,10 @@ async def custom_routes(wallet_info):
         – deploy_contract
         - vote_rubyscore
         - check_in_secondlive
+        - owlto_check_in
 
-    If random_module = True and withdraw_okx in use_modules, withdraw_okx will always be executed first
+    If random_module = True and withdraw_okx in use_modules, withdraw_okx will always be executed first and
+                       transfer_to_okx will be executed last
     ______________________________________________________
     Disclaimer - You can add modules to [] to select random ones,
     example [module_1, module_2, [module_3, module_4], module 5]

@@ -5,10 +5,11 @@ from web3 import AsyncWeb3
 from web3.eth import AsyncEth
 
 from config import RPC, REALTIME_SETTINGS_PATH
-from settings import (CHECK_GWEI, MAX_GWEI,
-                      RANDOMIZE_GWEI, MAX_GWEI_RANGE,
-                      GAS_SLEEP_FROM, GAS_SLEEP_TO,
-                      REALTIME_GWEI, SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO)
+from settings import (
+    CHECK_GWEI, MAX_GWEI,
+    RANDOMIZE_GWEI, MAX_GWEI_RANGE,
+    GAS_SLEEP_FROM, GAS_SLEEP_TO, REALTIME_GWEI,
+    SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO)
 from loguru import logger
 import json
 from utils.sleeping import sleep
@@ -48,8 +49,11 @@ async def get_gas(request_kwargs):
         gas_price = await w3.eth.gas_price
         gwei = w3.from_wei(gas_price, 'gwei')
         return gwei
-    except Exception as error:
-        logger.error(error)
+    except Exception:
+        if 'proxy' in request_kwargs:
+            logger.error(f"Can't connect to rpc with {request_kwargs['proxy']} proxy")
+        else:
+            logger.error(f"Can't connect to rpc. Try to turn off VPN")
 
 
 async def wait_gas(account):
@@ -57,7 +61,7 @@ async def wait_gas(account):
     while True:
         try:
             gas = await get_gas(account.request_kwargs)
-            if gas is None:
+            if gas is None and 'proxy' in account.request_kwargs:
                 gas = await get_gas({})
             max_gwei = get_max_gwei_user_settings()
             if gas > max_gwei:
