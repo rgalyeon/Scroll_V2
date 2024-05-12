@@ -1,3 +1,4 @@
+import asyncio
 from .account import Account
 from typing import List
 from web3 import AsyncWeb3, AsyncHTTPProvider
@@ -110,7 +111,7 @@ class Transfer(Account):
                 if wait_unlimited_time:
                     logger.info(f'[{self.account_id}][{self.address}] Waiting money for bridge '
                                 f'[{self.__class__.__name__}]')
-                    await sleep(*sleep_between_attempts)
+                    await sleep(*sleep_between_attempts, message="Sleep before next attempt")
                     continue
                 else:
                     logger.warning(f'[{self.account_id}][{self.address}] No chains with required balance. Skip module')
@@ -135,4 +136,5 @@ class Transfer(Account):
             await self.bridge_logic(source_chain, destination_chain, amount_wei, amount, balance)
             if not bridge_from_all_chains:
                 break
-            await sleep(*sleep_between_transfers)
+            await sleep(*sleep_between_transfers,
+                        message=f"[{self.account_id}][{self.address}] Sleep before next transfer")

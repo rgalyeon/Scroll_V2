@@ -1,4 +1,6 @@
-from config import SCROLLSCAN_URL, SCROLL_API_KEY
+import random
+
+from config import SCROLL_API_KEYS
 
 
 def make_api_url(module,
@@ -13,11 +15,11 @@ def make_api_url(module,
     :param kwargs: other arguments
     :return: Готовый url для отправки запроса
     """
-    url = SCROLLSCAN_URL + f'?module={module}' \
-                           f'&action={action}' \
-                           f'&address={address}' \
-                           f'&tag=latest' \
-                           f'&apikey={SCROLL_API_KEY}'
+    url = 'https://api.scrollscan.com/api' + f'?module={module}' \
+                                             f'&action={action}' \
+                                             f'&address={address}' \
+                                             f'&tag=latest' \
+                                             f'&apikey={random.choice(SCROLL_API_KEYS)}'
 
     if kwargs:
         for key, value in kwargs.items():

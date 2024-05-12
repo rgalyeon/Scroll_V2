@@ -43,4 +43,4 @@ class ZkStars(Account):
             await self.wait_until_tx_finished(txn_hash.hex())
 
             if _ != len(contracts):
-                await sleep(sleep_from, sleep_to)
+                await sleep(sleep_from, sleep_to, message="Sleep between next mint")

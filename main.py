@@ -15,7 +15,8 @@ from settings import (
     QUANTITY_THREADS,
     THREAD_SLEEP_FROM,
     THREAD_SLEEP_TO,
-    SAVE_LOGS
+    SAVE_LOGS,
+    CHECK_MARKS_PROGRESS
 )
 from modules_settings import *
 from utils.sleeping import sleep
@@ -42,6 +43,7 @@ def get_module():
             Choice(f"{next(counter)}) Bridge Orbiter", bridge_orbiter),
             Choice(f"{next(counter)}) Bridge Layerswap", bridge_layerswap),
             Choice(f"{next(counter)}) Bridge Nitro", bridge_nitro),
+            Choice(f"{next(counter)}) Bridge Relay", bridge_relay),
             Choice(f"{next(counter)}) Wrap ETH", wrap_eth),
             Choice(f"{next(counter)}) Unwrap ETH", unwrap_eth),
             Choice(f"{next(counter)}) Swap on Skydrome", swap_skydrome),
@@ -72,6 +74,7 @@ def get_module():
             Choice(f"{next(counter)}) Use custom routes", custom_routes),
             Choice(f"{next(counter)}) Use automatic routes", automatic_routes),
             Choice(f"{next(counter)}) Check transaction count", "tx_checker"),
+            Choice(f"{next(counter)}) Marks progress checker (need proxy)", progress_check),
             Choice(f"{next(counter)}) Exit", "exit"),
         ],
         qmark="⚙️ ",
@@ -97,7 +100,7 @@ async def run_module(module, wallet_data):
 
         traceback.print_exc()
 
-    await sleep(SLEEP_FROM, SLEEP_TO)
+    await sleep(SLEEP_FROM, SLEEP_TO, message=f"Move to the next wallet or end of script")
 
 
 def _async_run_module(module, wallet_data):
@@ -112,8 +115,14 @@ def main(module):
 
     wallets_data = get_wallets()
 
+    if module == progress_check:
+        return progress_check(wallets_data)
+
     if RANDOM_WALLET:
         random.shuffle(wallets_data)
+
+    if CHECK_MARKS_PROGRESS:
+        Scan(wallets_data).get_wallet_progress()
 
     with ThreadPoolExecutor(max_workers=QUANTITY_THREADS) as executor:
         for _, wallet_data in enumerate(wallets_data, start=1):
@@ -122,7 +131,8 @@ def main(module):
                 module,
                 wallet_data
             )
-            time.sleep(random.randint(THREAD_SLEEP_FROM, THREAD_SLEEP_TO))
+            if _ != len(wallet_data):
+                time.sleep(random.randint(THREAD_SLEEP_FROM, THREAD_SLEEP_TO))
 
 
 if __name__ == '__main__':

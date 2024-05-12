@@ -2,7 +2,7 @@ from loguru import logger
 from typing import List
 
 from utils.gas_checker import check_gas
-from utils.helpers import retry
+from utils.helpers import retry, marks_checker
 from .transfer import Transfer
 
 from config import (
@@ -19,7 +19,8 @@ class Scroll(Transfer):
     def __init__(self, wallet_info) -> None:
         super().__init__(wallet_info=wallet_info)
 
-    async def deposit(
+    @marks_checker
+    async def native_bridge_deposit(
             self,
             min_amount: float,
             max_amount: float,
@@ -62,7 +63,6 @@ class Scroll(Transfer):
 
     async def deposit_logic(self, source_chain, destination_chain, amount_wei, amount, balance):
         logger.info(f"[{self.account_id}][{self.address}] Bridge to Scroll | {amount} ETH")
-        print(amount_wei, amount_wei / 10 ** 18)
         contract = self.get_contract(BRIDGE_CONTRACTS["deposit"], DEPOSIT_ABI)
         contract_oracle = self.get_contract(BRIDGE_CONTRACTS["oracle"], ORACLE_ABI)
 
@@ -70,8 +70,10 @@ class Scroll(Transfer):
             fee = await contract_oracle.functions.estimateCrossDomainMessageFee(168000).call()
 
             tx_data = await self.get_tx_data(amount_wei + fee)
-            transaction = await contract.functions.depositETH(
+            transaction = await contract.functions.sendMessage(
+                self.address,
                 amount_wei,
+                '0x',
                 168000,
             ).build_transaction(tx_data)
 

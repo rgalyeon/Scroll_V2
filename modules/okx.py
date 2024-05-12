@@ -228,8 +228,8 @@ class Okx(Account):
                 break
             except InsufficientFunds:
                 if wait_unlimited_time:
-                    logger.info(f'[{self.account_id}][{self.address}] Waiting money on OKX')
-                    await sleep(*sleep_between_attempts)
+                    await sleep(*sleep_between_attempts,
+                                message=f'[{self.account_id}][{self.address}] Waiting money on OKX')
                 else:
                     break
             except Exception as e:

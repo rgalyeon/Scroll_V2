@@ -9,7 +9,8 @@ from settings import (
     CHECK_GWEI, MAX_GWEI,
     RANDOMIZE_GWEI, MAX_GWEI_RANGE,
     GAS_SLEEP_FROM, GAS_SLEEP_TO, REALTIME_GWEI,
-    SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO)
+    SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO, USE_SCROLL_GWEI,
+    USE_PROXY)
 from loguru import logger
 import json
 from utils.sleeping import sleep
@@ -41,8 +42,9 @@ def get_max_gwei_user_settings():
 
 async def get_gas(request_kwargs):
     try:
+        gas_chain = "scroll" if USE_SCROLL_GWEI else "ethereum"
         w3 = AsyncWeb3(
-            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC["ethereum"]["rpc"]),
+            AsyncWeb3.AsyncHTTPProvider(random.choice(RPC[gas_chain]["rpc"]),
                                         request_kwargs=request_kwargs),
             modules={"eth": (AsyncEth,)},
         )
@@ -60,13 +62,16 @@ async def wait_gas(account):
     logger.info("Get GWEI")
     while True:
         try:
-            gas = await get_gas(account.request_kwargs)
-            if gas is None and 'proxy' in account.request_kwargs:
+            if USE_PROXY:
+                gas = await get_gas(account.request_kwargs)
+                if gas is None and 'proxy' in account.request_kwargs:
+                    gas = await get_gas({})
+            else:
                 gas = await get_gas({})
             max_gwei = get_max_gwei_user_settings()
             if gas > max_gwei:
                 logger.info(f'Current GWEI: {gas} > {max_gwei}')
-                await sleep(GAS_SLEEP_FROM, GAS_SLEEP_TO)
+                await sleep(GAS_SLEEP_FROM, GAS_SLEEP_TO, message="Sleep before next attempt")
             else:
                 logger.success(f"GWEI is normal | current: {gas} < {max_gwei}")
                 break
@@ -83,7 +88,7 @@ def check_gas(func):
                 await wait_gas(args[0])
             result = await func(*args, **kwargs)
             if CHECK_GWEI:
-                await sleep(SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO)
+                await sleep(SLEEP_AFTER_TX_FROM, SLEEP_AFTER_TX_TO, message="Sleep after tx")
             return result
 
     return _wrapper

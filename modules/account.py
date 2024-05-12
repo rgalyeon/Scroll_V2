@@ -91,7 +91,7 @@ class Account:
         percent = 1 if random_percent == 100 else random_percent / 100
 
         if from_token == "ETH":
-            balance = await self.w3.eth.get_balance(self.address)
+            balance = await self.w3.eth.get_balance(self.w3.to_checksum_address(self.address))
             amount_wei = int(balance * percent) if all_amount else self.w3.to_wei(random_amount, "ether")
             amount = self.w3.from_wei(int(balance * percent), "ether") if all_amount else random_amount
         else:
@@ -138,7 +138,7 @@ class Account:
 
             await self.wait_until_tx_finished(txn_hash.hex())
 
-            await sleep(5, 20)
+            await sleep(5, 20, message=f"[{self.account_id}][{self.address}] Sleep after approve")
 
     async def wait_until_tx_finished(self, hash: str, max_wait_time=300) -> None:
         start_time = time.time()
@@ -156,21 +156,14 @@ class Account:
                     return
             except TransactionNotFound:
                 if time.time() - start_time > max_wait_time:
-                    print(f'FAILED TX: {hash}')
+                    logger.warning(f"[{self.account_id}][{self.address}] Timeout. Failed tx: {self.explorer}{hash}")
                     return
                 await asyncio.sleep(1)
 
     async def sign(self, transaction) -> Any:
         if RPC[self.chain]["eip1559"]:
             max_priority_fee_per_gas = await self.get_priority_fee()
-            base_fee = await self.w3.eth.gas_price
-            max_fee_per_gas = int(base_fee + max_priority_fee_per_gas * GAS_MULTIPLIER)
-
-            if max_fee_per_gas > base_fee:
-                max_fee_per_gas = base_fee
-
-            if max_priority_fee_per_gas > max_fee_per_gas:
-                max_priority_fee_per_gas = int(max_fee_per_gas * 0.95)
+            max_fee_per_gas = int((await self.w3.eth.gas_price) * 1.15)
 
             transaction.update(
                 {

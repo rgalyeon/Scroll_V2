@@ -36,7 +36,7 @@ class Aave(Account):
 
         await self.deposit(amount_wei, amount, balance)
         if make_withdraw:
-            await sleep(sleep_from, sleep_to)
+            await sleep(sleep_from, sleep_to, message=f"[{self.account_id}][{self.address}] Sleep before withdrawal")
             await self.withdraw(required_amount_for_withdraw)
 
     @retry

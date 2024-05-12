@@ -1,6 +1,7 @@
 import asyncio
 
 from modules import *
+from utils.progress_checker import Scan
 
 
 async def deposit_scroll(wallet_info):
@@ -27,12 +28,12 @@ async def deposit_scroll(wallet_info):
 
     min_amount = 0.001
     max_amount = 0.003
-    decimal = 4
+    decimal = 6
 
-    all_amount = False
+    all_amount = True
 
-    min_percent = 1
-    max_percent = 1
+    min_percent = 23
+    max_percent = 55
 
     check_balance_on_dest = False
     check_amount = 0.005
@@ -43,7 +44,7 @@ async def deposit_scroll(wallet_info):
     sleep_between_attempts = [120, 300]
 
     scroll_inst = Scroll(wallet_info)
-    await scroll_inst.deposit(
+    await scroll_inst.native_bridge_deposit(
         min_amount, max_amount, decimal, all_amount, min_percent, max_percent,
         save_funds, check_balance_on_dest, check_amount, min_required_amount,
         wait_unlimited_time, sleep_between_attempts
@@ -286,6 +287,47 @@ async def bridge_nitro(wallet_info):
 
     nitro_inst = Nitro(wallet_info=wallet_info, from_chains=from_chains)
     await nitro_inst.transfer_eth(
+        from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
+        check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
+        sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
+        sleep_between_attempts=sleep_between_attempts
+    )
+
+
+async def bridge_relay(wallet_info):
+    """
+    Bridge from relay
+
+    Supported chains - 'arbitrum', 'arbitrum_nova', 'base', 'optimism', 'zksync', 'ethereum', 'zora', 'mode', 'blast'
+    ______________________________________________________
+    Description: Look at bridge_orbiter description
+    """
+
+    from_chains = ["optimism"]  # Chain with max balance will be selected
+    to_chain = ["ethereum"]  # Randomly selected
+
+    min_amount = 0.005
+    max_amount = 0.0051
+    decimal = 6
+
+    all_amount = True
+
+    min_percent = 100
+    max_percent = 100
+
+    check_balance_on_dest = False
+    check_amount = 0.005
+    save_funds = [0.00005, 0.00003]
+    min_required_amount = 0
+
+    bridge_from_all_chains = False
+    sleep_between_transfers = [120, 300]
+
+    wait_unlimited_time = False
+    sleep_between_attempts = [200, 300]  # min, max
+
+    relay_inst = Relay(wallet_info, from_chains=from_chains)
+    await relay_inst.transfer_eth(
         from_chains, min_amount, max_amount, decimal, all_amount, min_percent, max_percent, save_funds,
         check_balance_on_dest, check_amount, min_required_amount, to_chain, bridge_from_all_chains,
         sleep_between_transfers=sleep_between_transfers, wait_unlimited_time=wait_unlimited_time,
@@ -849,6 +891,7 @@ async def custom_routes(wallet_info):
         – bridge_layerswap
         - bridge_rhinofi
         - bridge_nitro
+        - bridge_relay
     WRAP:
         – wrap_eth
         – unwrap_eth
@@ -995,3 +1038,11 @@ async def check_in_secondlive(wallet_info):
 
 def get_tx_count():
     asyncio.run(check_tx())
+
+
+def progress_check(wallets_data):
+
+    replace = True
+    check_eth = True
+
+    Scan(wallets_data).get_wallet_progress(replace, check_eth=check_eth)

@@ -30,3 +30,4 @@ from .transfer import Transfer
 from .owlto import Owlto
 from .aave import Aave
 from .nitro import Nitro
+from .relay import Relay

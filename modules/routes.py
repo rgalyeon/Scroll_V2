@@ -105,7 +105,7 @@ class Routes(Account):
                 logger.info(f"[{self.account_id}][{self.address}] Skip module")
             else:
                 await module(self.wallet_info)
-            await sleep(sleep_from, sleep_to)
+            await sleep(sleep_from, sleep_to, message=f"[{self.account_id}][{self.address}] Sleep before next module")
 
     async def start_automatic(self, transaction_count, cheap_ratio,
                               sleep_from, sleep_to,
@@ -123,4 +123,4 @@ class Routes(Account):
                 logger.info(f"[{self.account_id}][{self.address}] Skip module")
             else:
                 await module(self.wallet_info)
-            await sleep(sleep_from, sleep_to)
+            await sleep(sleep_from, sleep_to, message=f"[{self.account_id}][{self.address}] Sleep before next module")

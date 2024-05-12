@@ -22,8 +22,9 @@ class Minter(Account):
             contr, method = random.choice(contracts)
             contract = self.get_contract(contr, NFTS2ME_ABI)
             balance = await contract.functions.balanceOf(self.address).call()
+            mint_price = await contract.functions.mintPrice().call()
             if balance == 0:
-                tx_data = await self.get_tx_data()
+                tx_data = await self.get_tx_data(value=mint_price)
                 if method == 'mint':
                     transaction = await contract.functions.mint().build_transaction(tx_data)
                 elif method == 'mintRandomTo':

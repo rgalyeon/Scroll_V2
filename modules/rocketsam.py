@@ -36,7 +36,7 @@ class RocketSam(Account):
 
         await self.deposit(contracts, amount_wei, amount, balance)
         if make_withdraw:
-            await sleep(sleep_from, sleep_to)
+            await sleep(sleep_from, sleep_to, message=f"[{self.account_id}][{self.address}] Sleep before withdrawal")
             await self.withdraw([self.current_contract], sleep_from, sleep_to)
 
     async def get_deposit_amount(self, contract: str):
@@ -93,6 +93,6 @@ class RocketSam(Account):
                 await self.wait_until_tx_finished(txn_hash.hex())
 
                 if _ != len(contracts):
-                    await sleep(sleep_from, sleep_to)
+                    await sleep(sleep_from, sleep_to, message="Sleep between next withdrawal")
             else:
                 logger.error(f"[{self.account_id}][{self.address}] Deposit not found")

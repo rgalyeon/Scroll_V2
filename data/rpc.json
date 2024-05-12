@@ -106,5 +106,24 @@
     "token": "ETH",
     "eip1559": true,
     "chain_id": 42170
+  },
+  "mode": {
+    "rpc": [
+      "https://1rpc.io/mode"
+    ],
+    "explorer": "https://explorer.mode.network/tx/",
+    "token": "ETH",
+    "eip1559": false,
+    "chain_id": 34443
+  },
+  "blast": {
+    "rpc": [
+      "https://rpc.blast.io",
+      "https://rpc.ankr.com/blast"
+    ],
+    "explorer": "https://blastscan.io/tx/",
+    "token": "ETH",
+    "eip1559": false,
+    "chain_id": 81457
   }
 }

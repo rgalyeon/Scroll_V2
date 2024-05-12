@@ -4,6 +4,7 @@ WALLET_DATA_PATH = 'wallet_data.xlsx'
 SHEET_NAME = 'evm'
 ENCRYPTED_DATA_PATH = 'encrypted_data.txt'
 REALTIME_SETTINGS_PATH = 'realtime_settings.json'
+PROGRESS_PATH = 'progress.xlsx'
 
 NFTS2ME_CONTRACTS_PATH = 'data/nfts2me_contracts.json'
 
@@ -97,7 +98,7 @@ with open("data/abi/aave/abi.json", "r") as file:
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 BRIDGE_CONTRACTS = {
-    "deposit": "0xf8b1378579659d8f7ee5f3c929c2f3e332e41fd6",
+    "deposit": "0x6774Bcbd5ceCeF1336b5300fb5186a12DDD8b367",
     "withdraw": "0x4C0926FF5252A435FD19e10ED15e5a249Ba19d79",
     "oracle": "0x0d7E906BD9cAFa154b048cFa766Cc1E54E39AF9B"
 }
@@ -151,9 +152,8 @@ AMBIENT_CONTRACT = "0xaaaaAAAACB71BF2C8CaE522EA5fa455571A74106"
 
 AAVE_CONTRACT = "0xFF75A4B698E3Ec95E608ac0f22A03B8368E05F5D"
 
-SCROLLSCAN_URL = 'https://api.scrollscan.com/api'
-
-SCROLL_API_KEY = ''
+SCROLL_API_KEYS = ['']  # api from https://scrollscan.com/ ['api_key1', 'api_key2']
+ETHERSCAN_API_KEYS = ['']  # api from https://etherscan.io/ ['api_key1', 'api_key2']
 
 CHAINS_OKX = {
     'linea': 'Linea',
