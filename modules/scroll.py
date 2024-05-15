@@ -19,7 +19,6 @@ class Scroll(Transfer):
     def __init__(self, wallet_info) -> None:
         super().__init__(wallet_info=wallet_info)
 
-    @marks_checker
     async def native_bridge_deposit(
             self,
             min_amount: float,
