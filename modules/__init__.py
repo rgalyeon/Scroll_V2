@@ -31,3 +31,4 @@ from .owlto import Owlto
 from .aave import Aave
 from .nitro import Nitro
 from .relay import Relay
+from .canvas import Canvas

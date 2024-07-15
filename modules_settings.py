@@ -882,6 +882,30 @@ async def owlto_check_in(wallet_info):
     await owlto_inst.check_in(ref)
 
 
+async def mint_canvas_badge(wallet_info):
+    """
+    Mint main badge from canvas
+    ______________________________________________________
+
+    ref - wallet address of referral
+    """
+
+    ref = "OHD3P"
+
+    canvas_inst = Canvas(wallet_info)
+    await canvas_inst.mint_main_badge(ref)
+
+
+async def mint_eth_badge(wallet_info):
+    """
+    Mint Ethereum Year badge from canvas
+    ______________________________________________________
+    """
+
+    canvas_inst = Canvas(wallet_info)
+    await canvas_inst.mint_eth_badge()
+
+
 async def custom_routes(wallet_info):
     """
     BRIDGE:
@@ -913,6 +937,9 @@ async def custom_routes(wallet_info):
         – mint_zkstars
         – create_omnisea
         – mint_nft
+    CANVAS BADGES:
+        - mint_canvas_badge
+        - mint_eth_badge
     ANOTHER:
         – swap_multiswap
         – swap_tokens

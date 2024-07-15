@@ -67,12 +67,11 @@
   "scroll": {
     "rpc": [
       "https://rpc.ankr.com/scroll",
-      "https://rpc.scroll.io",
       "https://scroll.blockpi.network/v1/rpc/public"
     ],
     "explorer": "https://scrollscan.com/tx/",
     "token": "ETH",
-    "eip1559": false,
+    "eip1559": true,
     "chain_id": 534352
   },
   "linea": {
@@ -83,7 +82,7 @@
     ],
     "explorer": "https://lineascan.build/tx/",
     "token": "ETH",
-    "eip1559": false,
+    "eip1559": true,
     "chain_id": 59144
   },
   "zora": {
