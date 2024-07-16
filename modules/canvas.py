@@ -70,8 +70,9 @@ class Canvas(Account):
         contract = self.get_contract(CANVAS_CONTRACT, CANVAS_ABI)
         name = None
 
-        if str.isalpha(self.account_id) and 4 <= len(self.account_id) <= 15:
-            name = self.account_id
+        str_name = str(self.account_id)
+        if str.isalpha(str_name) and 4 <= len(str_name) <= 15:
+            name = str_name
 
         name = await self.generate_random_nickname(name, contract)
 
