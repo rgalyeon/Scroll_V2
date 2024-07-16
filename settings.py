@@ -3,11 +3,11 @@ SAVE_LOGS = False
 # RANDOM WALLETS MODE
 RANDOM_WALLET = True  # True/False
 
-USE_PROXY = True
+USE_PROXY = False
 
-CHECK_MARKS_PROGRESS = False
+CHECK_BADGES_PROGRESS = True
 
-SLEEP_FROM = 3600  # Second
+SLEEP_FROM = 3800  # Second
 SLEEP_TO = 5000  # Second
 
 # Sleep after a transaction has been executed. Blocks threads so that wallets do not make a transaction in 1 second.

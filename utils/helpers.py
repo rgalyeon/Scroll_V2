@@ -1,10 +1,10 @@
 from loguru import logger
-from settings import RETRY_COUNT, CHECK_MARKS_PROGRESS
+from settings import RETRY_COUNT, CHECK_BADGES_PROGRESS
 from utils.sleeping import sleep
 import traceback
 from functools import wraps
 from main import transaction_lock
-from config import PROGRESS_PATH
+from config import BADGES_PATH
 import pandas as pd
 
 
@@ -35,18 +35,23 @@ def remove_wallet(private_key: str):
                 file.write(line)
 
 
-def marks_checker(func):
+def badges_checker(func):
+    func_to_name = {
+        'mint_eth_badge': 'Ethereum Year Badge',
+        'mint_main_badge': 'Main Badge'
+    }
+
     @wraps(func)
     async def wrapper(*args, **kwargs):
-        if CHECK_MARKS_PROGRESS:
+        if CHECK_BADGES_PROGRESS:
             with transaction_lock:
-                progress = pd.read_excel(PROGRESS_PATH, index_col=0)
+                progress = pd.read_excel(BADGES_PATH, index_col=0)
             account = args[0]
             module_name = func.__name__
             wallet = account.address.lower()
 
             try:
-                status = progress.loc[wallet, module_name]
+                status = progress.loc[wallet, func_to_name[module_name]]
             except KeyError:
                 logger.error(f"[{account.account_id}][{account.address}] Progress not found")
                 from traceback import print_exc
@@ -56,8 +61,8 @@ def marks_checker(func):
                 result = await func(*args, **kwargs)
                 if result:
                     with transaction_lock:
-                        progress.loc[wallet, module_name] = True
-                        progress.fillna(False).to_excel(PROGRESS_PATH)
+                        progress.loc[wallet, func_to_name[module_name]] = True
+                        progress.fillna(False).to_excel(BADGES_PATH)
                 return result
             else:
                 logger.warning(f"[{account.account_id}][{account.address}] Module {module_name} already complete. "

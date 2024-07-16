@@ -2,7 +2,7 @@ import aiohttp
 from loguru import logger
 from config import CANVAS_CONTRACT, CANVAS_ABI
 from utils.gas_checker import check_gas
-from utils.helpers import retry
+from utils.helpers import retry, badges_checker
 from .account import Account
 import string
 import random
@@ -40,6 +40,7 @@ class Canvas(Account):
             length = random.randint(10, 15)
             name = ''.join(random.choice(characters) for _ in range(length))
 
+    @badges_checker
     @retry
     @check_gas
     async def mint_eth_badge(self):
@@ -62,6 +63,7 @@ class Canvas(Account):
             logger.error(f"[{self.account_id}][{self.address}] Error on mint")
             return
 
+    @badges_checker
     @retry
     @check_gas
     async def mint_main_badge(self, ref_code=""):
@@ -107,4 +109,3 @@ class Canvas(Account):
         signed_txn = await self.sign(transaction)
         txn_hash = await self.send_raw_transaction(signed_txn)
         await self.wait_until_tx_finished(txn_hash.hex())
-

@@ -4,7 +4,8 @@ WALLET_DATA_PATH = 'wallet_data.xlsx'
 SHEET_NAME = 'evm'
 ENCRYPTED_DATA_PATH = 'encrypted_data.txt'
 REALTIME_SETTINGS_PATH = 'realtime_settings.json'
-PROGRESS_PATH = 'progress.xlsx'
+BADGES_PATH = 'badges.xlsx'
+MARKS_PATH = 'marks.xlsx'
 
 NFTS2ME_CONTRACTS_PATH = 'data/nfts2me_contracts.json'
 
@@ -157,6 +158,7 @@ AAVE_CONTRACT = "0xFF75A4B698E3Ec95E608ac0f22A03B8368E05F5D"
 
 CANVAS_CONTRACT = "0xB23AF8707c442f59BDfC368612Bd8DbCca8a7a5a"
 
+SCROLLSCAN_URL = 'https://api.scrollscan.com/api'
 SCROLL_API_KEYS = ['']  # api from https://scrollscan.com/ ['api_key1', 'api_key2']
 ETHERSCAN_API_KEYS = ['']  # api from https://etherscan.io/ ['api_key1', 'api_key2']
 

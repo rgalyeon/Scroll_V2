@@ -2,12 +2,10 @@ import random
 
 from loguru import logger
 
-from config import ETHERSCAN_API_KEYS, PROGRESS_PATH, SCROLL_API_KEYS
+from config import MARKS_PATH
 import requests
-from typing import List, Dict
 import pandas as pd
 from tqdm import tqdm
-import time
 import os
 from fake_useragent import UserAgent
 
@@ -32,9 +30,9 @@ class Scan:
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
 
-    def get_wallet_progress(self, replace=False, check_eth=True):
-        if os.path.exists(PROGRESS_PATH) and not replace:
-            logger.info(f'Load progress from {PROGRESS_PATH}')
+    def get_marks(self, replace=False):
+        if os.path.exists(MARKS_PATH) and not replace:
+            logger.info(f'Load progress from {MARKS_PATH}')
             return
         logger.info('Check Marks')
 
@@ -63,4 +61,4 @@ class Scan:
                     continue
             data = response.json()
             df.loc[wallet_info['address'], 'Marks'] = round(data[0].get("points"), 4)
-        df.fillna('bad_response').to_excel(PROGRESS_PATH)
+        df.fillna('bad_response').to_excel(MARKS_PATH)

@@ -2,7 +2,7 @@ from loguru import logger
 from typing import List
 
 from utils.gas_checker import check_gas
-from utils.helpers import retry, marks_checker
+from utils.helpers import retry, badges_checker
 from .transfer import Transfer
 
 from config import (

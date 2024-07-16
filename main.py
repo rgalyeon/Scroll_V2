@@ -16,7 +16,7 @@ from settings import (
     THREAD_SLEEP_FROM,
     THREAD_SLEEP_TO,
     SAVE_LOGS,
-    CHECK_MARKS_PROGRESS
+    CHECK_BADGES_PROGRESS
 )
 from modules_settings import *
 from utils.sleeping import sleep
@@ -74,7 +74,8 @@ def get_module():
             Choice(f"{next(counter)}) Use custom routes", custom_routes),
             Choice(f"{next(counter)}) Use automatic routes", automatic_routes),
             Choice(f"{next(counter)}) Check transaction count", "tx_checker"),
-            Choice(f"{next(counter)}) Marks progress checker (need proxy)", progress_check),
+            Choice(f"{next(counter)}) Scroll Marks checker (need proxy)", marks_progress_check),
+            Choice(f"{next(counter)}) Badges checker (need proxy)", badges_progress_check),
             Choice(f"{next(counter)}) Exit", "exit"),
         ],
         qmark="⚙️ ",
@@ -115,14 +116,17 @@ def main(module):
 
     wallets_data = get_wallets()
 
-    if module == progress_check:
-        return progress_check(wallets_data)
+    if module == marks_progress_check:
+        return marks_progress_check(wallets_data)
+
+    if module == badges_progress_check:
+        return badges_progress_check(wallets_data)
 
     if RANDOM_WALLET:
         random.shuffle(wallets_data)
 
-    if CHECK_MARKS_PROGRESS:
-        Scan(wallets_data).get_wallet_progress()
+    if CHECK_BADGES_PROGRESS:
+        ScrollBadges(wallets_data).get_badge_progress()
 
     with ThreadPoolExecutor(max_workers=QUANTITY_THREADS) as executor:
         for _, wallet_data in enumerate(wallets_data, start=1):

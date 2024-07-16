@@ -1,7 +1,8 @@
 import asyncio
 
 from modules import *
-from utils.progress_checker import Scan
+from utils.marks_checker import Scan
+from utils.badges_checker import ScrollBadges
 
 
 async def deposit_scroll(wallet_info):
@@ -1067,9 +1068,15 @@ def get_tx_count():
     asyncio.run(check_tx())
 
 
-def progress_check(wallets_data):
+def marks_progress_check(wallets_data):
 
     replace = True
-    check_eth = True
 
-    Scan(wallets_data).get_wallet_progress(replace, check_eth=check_eth)
+    Scan(wallets_data).get_marks(replace)
+
+
+def badges_progress_check(wallets_data):
+
+    replace = True
+
+    ScrollBadges(wallets_data).get_badge_progress(replace)
