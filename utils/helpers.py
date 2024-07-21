@@ -53,9 +53,9 @@ def badges_checker(func):
             try:
                 status = progress.loc[wallet, func_to_name[module_name]]
             except KeyError:
-                logger.error(f"[{account.account_id}][{account.address}] Progress not found")
-                from traceback import print_exc
-                print_exc()
+                logger.error(f"[{account.account_id}][{account.address}] Progress not found. Use Badges Checker first or turn of CHECK_BADGES_PROGRESS in settings")
+                # from traceback import print_exc
+                # print_exc()
                 status = False
             if not status:
                 result = await func(*args, **kwargs)

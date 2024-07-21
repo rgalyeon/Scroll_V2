@@ -82,7 +82,8 @@ class Canvas(Account):
         check_link = f"https://canvas.scroll.cat/badge/check?badge={badge}&recipient={self.address}"
         sig_link = f"https://canvas.scroll.cat/code/{ref_code}/sig/{self.address}"
 
-        minted = await contract.functions.isProfileMinted(self.address).call()
+        profile = await contract.functions.getProfile(self.address).call()
+        minted = await contract.functions.isProfileMinted(profile).call()
         if minted:
             logger.info(f"[{self.account_id}][{self.address}] Already minted")
             return
