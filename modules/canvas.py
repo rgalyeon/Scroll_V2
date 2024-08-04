@@ -1,3 +1,5 @@
+import json
+
 import aiohttp
 from loguru import logger
 from config import CANVAS_CONTRACT, CANVAS_ABI
@@ -44,6 +46,8 @@ class Canvas(Account):
     @retry
     @check_gas
     async def mint_eth_badge(self):
+        logger.info(f"[{self.account_id}][{self.address}] Mint ETH Badge")
+
         badge_address = "0x3dacAd961e5e2de850F5E027c70b56b5Afa5DfeD"
         link = f"https://canvas.scroll.cat/badge/claim?badge={badge_address}&recipient={self.address}"
 
@@ -67,6 +71,8 @@ class Canvas(Account):
     @retry
     @check_gas
     async def mint_main_badge(self, ref_code=""):
+        logger.info(f"[{self.account_id}][{self.address}] Mint Canvas Main Badge")
+
         contract = self.get_contract(CANVAS_CONTRACT, CANVAS_ABI)
         name = None
 
@@ -111,3 +117,75 @@ class Canvas(Account):
         signed_txn = await self.sign(transaction)
         txn_hash = await self.send_raw_transaction(signed_txn)
         await self.wait_until_tx_finished(txn_hash.hex())
+
+    @badges_checker
+    @retry
+    @check_gas
+    async def mint_omnihub_badge(self):
+        logger.info(f"[{self.account_id}][{self.address}] Start mint OmniHub badge")
+
+        badge = "0xdd8CCDad022999afD61DFda146e4C40F47dE4Eec"
+
+        check_link = f"https://api.omnihub.xyz/api/integration/scroll/check?badge={badge}&recipient={self.address}"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(check_link, headers=self.headers, proxy=self.proxy) as response:
+                response_data = await response.json()
+
+        if not response_data['eligibility']:
+            logger.error(f"[{self.account_id}][{self.address}] Not eligible for mint")
+            return
+
+        link = f"https://api.omnihub.xyz/api/integration/scroll/claim?badge={badge}&recipient={self.address}"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(link, headers=self.headers, proxy=self.proxy) as response:
+                response_data = await response.json()
+
+        if response_data['message'] == 'success':
+            tx_data = await self.get_tx_data()
+            tx_data['to'] = self.w3.to_checksum_address(response_data['tx']['to'])
+            tx_data['data'] = response_data['tx']['data']
+
+            signed_txn = await self.sign(tx_data)
+            txn_hash = await self.send_raw_transaction(signed_txn)
+            await self.wait_until_tx_finished(txn_hash.hex())
+        else:
+            logger.error(f"[{self.account_id}][{self.address}] Error on mint")
+            return
+
+    @badges_checker
+    @retry
+    @check_gas
+    async def mint_trustalabs_reputation_badge(self):
+        logger.info(f"[{self.account_id}][{self.address}] Start mint Trusta Labs MEDIA badge")
+
+        badge = "0x47FF789Da49686C6cC38998F76F78A12A5939082"
+
+        check_link = f"https://mp.trustalabs.ai/attestations/media_badge/check?badge={badge}&recipient={self.address}"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(check_link, headers=self.headers, proxy=self.proxy) as response:
+                response_data = json.loads(await response.text())
+
+        if not response_data['eligibility']:
+            logger.error(f"[{self.account_id}][{self.address}] Not eligible for mint")
+            return
+
+        link = f"https://mp.trustalabs.ai/attestations/media_badge/claim?badge={badge}&recipient={self.address}"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(link, headers=self.headers, proxy=self.proxy) as response:
+                response_data = json.loads(await response.text())
+
+        if response_data['message'] == 'success':
+            tx_data = await self.get_tx_data()
+            tx_data['to'] = self.w3.to_checksum_address(response_data['tx']['to'])
+            tx_data['data'] = response_data['tx']['data']
+
+            signed_txn = await self.sign(tx_data)
+            txn_hash = await self.send_raw_transaction(signed_txn)
+            await self.wait_until_tx_finished(txn_hash.hex())
+        else:
+            logger.error(f"[{self.account_id}][{self.address}] Error on mint")
+            return

@@ -907,6 +907,36 @@ async def mint_eth_badge(wallet_info):
     await canvas_inst.mint_eth_badge()
 
 
+async def mint_omnihub_badge(wallet_info):
+    """
+    Mint OmniHub from canvas
+    ______________________________________________________
+    """
+
+    omnihub_inst = Canvas(wallet_info)
+    await omnihub_inst.mint_omnihub_badge()
+
+
+async def mint_trustalabs_badge(wallet_info):
+    """
+    Mint TrustaLabs from canvas
+    ______________________________________________________
+    """
+
+    tl_inst = Canvas(wallet_info)
+    await tl_inst.mint_trustalabs_reputation_badge()
+
+
+async def deploy_omnihub_nft(wallet_info):
+    """
+    Deploy OmniHub NFT
+    ______________________________________________________
+    """
+
+    omnihub_inst = OmniHub(wallet_info)
+    await omnihub_inst.deploy()
+
+
 async def custom_routes(wallet_info):
     """
     BRIDGE:

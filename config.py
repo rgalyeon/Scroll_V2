@@ -99,6 +99,9 @@ with open("data/abi/aave/abi.json", "r") as file:
 with open("data/abi/canvas/abi.json", "r") as file:
     CANVAS_ABI = json.load(file)
 
+with open("data/abi/omnihub/abi.json", "r") as file:
+    OMNIHUB_ABI = json.load(file)
+
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 BRIDGE_CONTRACTS = {
@@ -157,6 +160,8 @@ AMBIENT_CONTRACT = "0xaaaaAAAACB71BF2C8CaE522EA5fa455571A74106"
 AAVE_CONTRACT = "0xFF75A4B698E3Ec95E608ac0f22A03B8368E05F5D"
 
 CANVAS_CONTRACT = "0xB23AF8707c442f59BDfC368612Bd8DbCca8a7a5a"
+
+OMNIHUB_CONTRACT = "0xD6238AD2887166031567616d9a54B21eb70e4dFd"
 
 SCROLLSCAN_URL = 'https://api.scrollscan.com/api'
 SCROLL_API_KEYS = ['']  # api from https://scrollscan.com/ ['api_key1', 'api_key2']

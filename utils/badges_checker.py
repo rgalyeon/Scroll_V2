@@ -50,6 +50,10 @@ class ScrollBadges:
                 df.loc[wallet, 'Ethereum Year Badge'] = True
             if tx['to'] == '0xC47300428b6AD2c7D03BB76D05A176058b47E6B0'.lower() and tx['methodId'] == '0xf17325e7':
                 df.loc[wallet, 'Origin NFT Badge'] = True
+            if tx['to'] == '0x13babb8C705506Fd71f7e9Aff431B9aF2E659FE9'.lower() and tx['methodId'] == '0x3c042715':
+                df.loc[wallet, 'OmniHub Badge'] = True
+            if tx['to'] == '0x65AB4b5f30AeF8B29858eA2cbD6b0d0E68010206'.lower() and tx['methodId'] == '0x3c042715':
+                df.loc[wallet, 'Trusta MEDIA Score Badge'] = True
 
     def wait_transactions(self, address, all_proxies):
         n_attemps = 10
@@ -68,7 +72,7 @@ class ScrollBadges:
             return
         logger.info('Check quests progress from blockchain data')
 
-        cols = ['Main Badge', 'Ethereum Year Badge', 'Origin NFT Badge']
+        cols = ['Main Badge', 'Ethereum Year Badge', 'Origin NFT Badge', 'OmniHub Badge', 'Trusta MEDIA Score Badge']
 
         df = pd.DataFrame(columns=cols)
         all_proxies = [wallet_info['proxy'] for wallet_info in self.wallets_data]
