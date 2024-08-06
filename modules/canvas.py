@@ -38,7 +38,7 @@ class Canvas(Account):
     async def generate_random_nickname(name, contract):
         characters = string.ascii_letters + string.digits + "_"
 
-        if not name:
+        if not name or any(char.isdigit() for char in name):
             length = random.randint(10, 15)
             name = ''.join(random.choice(characters) for _ in range(length))
 
