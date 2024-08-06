@@ -38,7 +38,8 @@ def remove_wallet(private_key: str):
 def badges_checker(func):
     func_to_name = {
         'mint_eth_badge': 'Ethereum Year Badge',
-        'mint_main_badge': 'Main Badge'
+        'mint_main_badge': 'Main Badge',
+        'mint_scroll_origin_badge': 'Scroll Origin Badge'
     }
 
     @wraps(func)

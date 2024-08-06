@@ -4,6 +4,7 @@ from utils.gas_checker import check_gas
 from utils.helpers import retry
 from .account import Account
 from utils.sleeping import sleep
+import random
 
 
 class Aave(Account):
@@ -37,7 +38,7 @@ class Aave(Account):
         await self.deposit(amount_wei, amount, balance)
         if make_withdraw:
             await sleep(sleep_from, sleep_to, message=f"[{self.account_id}][{self.address}] Sleep before withdrawal")
-            await self.withdraw(required_amount_for_withdraw)
+            await self.withdraw(0, 0, 6, True, 100, 100, 0)
 
     @retry
     @check_gas
@@ -66,17 +67,27 @@ class Aave(Account):
 
     @retry
     @check_gas
-    async def withdraw(self, required_amount_for_withdraw):
-        amount = await self.get_deposit_amount()
-        balance = self.w3.from_wei(amount, 'ether')
+    async def withdraw(self, min_amount, max_amount, decimal, all_amount, min_percent, max_percent,
+                       min_required_amount) -> None:
+        balance = await self.get_deposit_amount()
+        random_amount = round(random.uniform(min_amount, max_amount), decimal)
+        random_percent = random.randint(min_percent, max_percent)
+        percent = 1 if random_percent == 100 else random_percent / 100
+        amount_wei = int(balance * percent) if all_amount else self.w3.to_wei(random_amount, "ether")
+        amount = self.w3.from_wei(int(balance * percent), "ether") if all_amount else random_amount
 
-        if balance < required_amount_for_withdraw:
-            logger.info(f"[{self.account_id}][{self.address}] Skip withdraw {balance} ETH from Aave")
+        if not all_amount and amount_wei > balance:
+            amount_wei = balance
+            amount = self.w3.from_wei(amount_wei, 'ether')
+
+        if amount < min_required_amount:
+            logger.info(f"[{self.account_id}][{self.address}] Amount < min required amount. Skip module")
             return
 
         if amount > 0:
             logger.info(
-                f"[{self.account_id}][{self.address}] Make withdraw {balance} ETH from Aave"
+                f"[{self.account_id}][{self.address}] Make withdraw from Aave | " +
+                f"{self.w3.from_wei(amount_wei, 'ether')} ETH"
             )
 
             await self.approve(amount, self.aave_weth_contract, AAVE_CONTRACT)
@@ -85,7 +96,7 @@ class Aave(Account):
 
             transaction = await self.contract.functions.withdrawETH(
                 self.w3.to_checksum_address("0x11fCfe756c05AD438e312a7fd934381537D3cFfe"),
-                amount,
+                amount_wei,
                 self.address
             ).build_transaction(tx_data)
 

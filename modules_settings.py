@@ -588,13 +588,6 @@ async def deposit_aave(wallet_info):
     )
 
 
-async def withdraw_aave(wallet_info):
-    required_amount_for_withdraw = 0.005
-
-    aave_inst = Aave(wallet_info)
-    await aave_inst.withdraw(required_amount_for_withdraw)
-
-
 async def deposit_rocketsam(wallet_info):
     """
     Make deposit on RocketSam
@@ -888,43 +881,83 @@ async def mint_canvas_badge(wallet_info):
     Mint main badge from canvas
     ______________________________________________________
 
-    ref - wallet address of referral
+    ref - list of referral codes, choose randomly
     """
 
-    ref = "OHD3P"
+    ref = ["OHD3P"]
 
     canvas_inst = Canvas(wallet_info)
     await canvas_inst.mint_main_badge(ref)
 
 
-async def mint_eth_badge(wallet_info):
-    """
-    Mint Ethereum Year badge from canvas
-    ______________________________________________________
-    """
+async def mint_scroll_origin_badge(wallet_info):
 
     canvas_inst = Canvas(wallet_info)
-    await canvas_inst.mint_eth_badge()
+    await canvas_inst.mint_scroll_origin_badge()
 
 
-async def mint_omnihub_badge(wallet_info):
+async def mint_all_badges(wallet_info):
     """
-    Mint OmniHub from canvas
+    Mint All Badges
+
+    ref - list of referral codes for main badge, choose randomly
     ______________________________________________________
     """
 
-    omnihub_inst = Canvas(wallet_info)
-    await omnihub_inst.mint_omnihub_badge()
+    sleep_from = 10
+    sleep_to = 30
+
+    ref = ["OHD3P"]
+
+    random_badge = True
+
+    canvas_inst = Canvas(wallet_info)
+    await canvas_inst.mint_all_badges(sleep_from, sleep_to, random_badge, ref)
 
 
-async def mint_trustalabs_badge(wallet_info):
+async def withdraw_layerbank(wallet_info):
     """
-    Mint TrustaLabs from canvas
-    ______________________________________________________
+    Withdraw from layerbank
+
+    min_required_amount - required balance for withdrawal in eth
     """
 
-    tl_inst = Canvas(wallet_info)
-    await tl_inst.mint_trustalabs_reputation_badge()
+    min_amount = 0.001
+    max_amount = 0.002
+    decimal = 5
+
+    all_amount = False
+
+    min_percent = 20
+    max_percent = 35
+
+    min_required_amount = 0.00001
+
+    layerbank_inst = LayerBank(wallet_info)
+    await layerbank_inst.withdraw(min_amount, max_amount, decimal, all_amount, min_percent, max_percent,
+                                  min_required_amount)
+
+
+async def withdraw_aave(wallet_info):
+    """
+    Withdraw from aave
+
+    min_required_amount - required balance for withdrawal in eth
+    """
+
+    min_amount = 0.001
+    max_amount = 0.002
+    decimal = 5
+
+    all_amount = False
+
+    min_percent = 20
+    max_percent = 35
+
+    min_required_amount = 0
+
+    aave_inst = Aave(wallet_info)
+    await aave_inst.withdraw(min_amount, max_amount, decimal, all_amount, min_percent, max_percent, min_required_amount)
 
 
 async def deploy_omnihub_nft(wallet_info):
@@ -970,7 +1003,8 @@ async def custom_routes(wallet_info):
         – mint_nft
     CANVAS BADGES:
         - mint_canvas_badge
-        - mint_eth_badge
+        - mint_scroll_origin_badge
+        - mint_all_badges
     ANOTHER:
         – swap_multiswap
         – swap_tokens
@@ -1054,11 +1088,6 @@ async def mint_zerius(wallet_info):
 
     zerius_inst = Zerius(wallet_info)
     await zerius_inst.mint()
-
-
-async def withdraw_layerbank(wallet_info):
-    layerbank_inst = LayerBank(wallet_info)
-    await layerbank_inst.withdraw()
 
 
 async def send_mail(wallet_info):

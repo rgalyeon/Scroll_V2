@@ -163,6 +163,42 @@ CANVAS_CONTRACT = "0xB23AF8707c442f59BDfC368612Bd8DbCca8a7a5a"
 
 OMNIHUB_CONTRACT = "0xD6238AD2887166031567616d9a54B21eb70e4dFd"
 
+
+ETH_BADGE = ("https://canvas.scroll.cat/badge/check?badge=0x3dacAd961e5e2de850F5E027c70b56b5Afa5DfeD", "ETH Year")
+AMBIENT_SWAPOOOR = ("https://ambient-scroll-badge.liquidity.tools/api/check?badge=0xDaf958ec36dB494e82709a3AaB9FA6981EfC4Dad", "Ambient Swapooor")
+AMBIENT_PROVIDOOR = ("https://ambient-scroll-badge.liquidity.tools/api/check?badge=0xC634b718618729df70331D79fcd6E889a547fbEB", "Ambient Providoor")
+AMBIENT_FILLOOR = ("https://ambient-scroll-badge.liquidity.tools/api/check?badge=0x21C5E85eBCbd924BA633D4A7A5F2718f25C713D8", "Ambient Filloor")
+AMBIENT_YEET = ("https://ambient-scroll-badge.liquidity.tools/api/check?badge=0x7bD1AEADCc59EedaF4775E4D3197Ce9a7031BD01", "Ambient Yeet")
+ZEBRA_BADGE = ("https://zebra.xyz/api/badge/check?badge=0x09E14E520eec3583681Fe225a4B506743EC3cc78", "Zebra")
+SCROLLY_BADGE = ("https://api.scrolly.xyz/api/badge/check?badge=0x79b4f7492328D0Cc4ED0Ddaee08Cd42f0F36A4CC", "Scrolly")
+PENCIL_S_BADGE = ("https://pencilsprotocol.io/api/scroll/canvas/badge/pencil/check?badge=0x766e3f1EE86439DE0597F6e917F980A4e5d187A3", "Pencil S")
+PENCIL_P_BADGE = ("https://pencilsprotocol.io/api/scroll/canvas/badge/pencil/check?badge=0x2d8E67c1427a1ebb9ddB5c4D38143140B0c19aC8", "Pensil P")
+SCROLLER_AGENT_BADGE = ("https://vwb06c8e7h.execute-api.us-east-1.amazonaws.com/dev/check?badge=0x9aD600bDD45Cc30242fd905872962dc415F68530", "Scroller Agent")
+PASSPORT_XYZ_BADGE = ("https://passport-iam.gitcoin.co/scroll/check?badge=0xa623f348A12cFdC6B64a8c9e883dD9B243438E79", "Passport XYZ")
+SYMBIOSIS_PROFESSIONAL = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0xB936740f00FFA90a55C362C33840913eaCFDcE25", "Symbiosis Professional")
+TRUSTA_MEDIA_BADGE = ("https://mp.trustalabs.ai/attestations/media_badge/check?badge=0x47FF789Da49686C6cC38998F76F78A12A5939082", "Trusta MEDIA")
+SYMBIOSIS_WHALE = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0xaE98FC0e46977DaF650B180041dB20155ac66277", "Symbiosis Whale")
+SYMBIOSIS_SWAPPER = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x3c1A82D5877AB970Be9d80AB8185C5F9F1505C49", "Symbiosis Swapper")
+SYMBIOSIS_BEGINNER = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x66703cd7eBA1b114cA652b1C2DE268858cBedEc8", "Symbiosis Beginner")
+XHS_BADGE = ("https://scroll-canvas-api.xname.app/api/check?badge=0x7C0deB6aBf29cC829186933720af67da8B1EF633", "XHS")
+SCROLL_BOOSTER = ("https://scroll-canvas-api.xname.app/api/domain/check?badge=0xed269A526ad793CcB671Ef55A7AF6E45F300d462", "Scroll Booster")
+OMNIHUB_BADGE = ("https://api.omnihub.xyz/api/integration/scroll/check?badge=0xdd8CCDad022999afD61DFda146e4C40F47dE4Eec", "Omnihub")
+TRUSTA_POH_BADGE = ("https://mp.trustalabs.ai/attestations/poh_badge/check?badge=0x26B97C832C04C06cAd34dCE23c701beDC3555a5c", "Trusta POH")
+RETRO_BRIDGE_BADGE = ("https://backend.retrobridge.io/api/quest/check?badge=0x59700c6Ed282eD7611943129f226914ACBB3982b", "Retro Bridge")
+SYMBIOSIS_PRO_SWAPPER = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x0a584c042133aF17f3e522F09A77Ee1496f3a567", "Symbiosis Pro Swapper")
+SMILECOBRA_BADGE = ("https://api.smilecobra.io/tripartite/scroll/badge/check?badge=0x7ecf596Ed5fE6957158cD626b6bE2A667267424f", "Smilecobra")
+SCROLL_EXPLORER = ("https://publicapi.xenobunny.xyz/canvas/lands/check?badge=0x7188B352C818f291432CDe8E4B1f0576c188F9e4", "Scroll Explorer")
+SYMBIOSIS_BRIDGE_1 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0xB69cF3247b60F72ba560B3C1e0F53DAF9e9D5201", "Symbiosis Bridge 1")
+SYMBIOSIS_BRIDGE_2 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x35CB802ede5f970AE6d7B8E7b7b82C82Fea273C7", "Symbiosis Bridge 2")
+SYMBIOSIS_BRIDGE_3 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x4445BE64c03154052bd661fD1B0d01FC625Df06E", "Symbiosis Bridge 3")
+SYMBIOSIS_BRIDGE_4 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x475d1E9Be98B7B7b97D7ED9695541A0209e982dE", "Symbiosis Bridge 4")
+SYMBIOSIS_BRIDGE_5 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0xCA5d53f143822dd8b9789b1A12d2a10A39a499e4", "Symbiosis Bridge 5")
+SYMBIOSIS_BRIDGE_6 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x9765B7B7926Cb27b84f5F48EA0758Fa99da3C7d6", "Symbiosis Bridge 6")
+SYMBIOSIS_BRIDGE_7 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x6d352E2987C0AC7D896B74453f400477dE7446F0", "Symbiosis Bridge 7")
+SYMBIOSIS_BRIDGE_8 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x5bA1cC19C89BeD7d4660316D1eB41B6A581B98c7", "Symbiosis Bridge 8")
+SYMBIOSIS_BRIDGE_9 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0xCd223ce0Cc6C05c1604f8f83A50e98202E600bD6", "Symbiosis Bridge 9")
+SYMBIOSIS_BRIDGE_10 = ("https://api.symbiosis.finance/crosschain/v1/scroll-badge/check?badge=0x3573335B5128F50F79617f1218f2A7aA0EE68703", "Symbiosis Bridge 10")
+
 SCROLLSCAN_URL = 'https://api.scrollscan.com/api'
 SCROLL_API_KEYS = ['']  # api from https://scrollscan.com/ ['api_key1', 'api_key2']
 ETHERSCAN_API_KEYS = ['']  # api from https://etherscan.io/ ['api_key1', 'api_key2']
