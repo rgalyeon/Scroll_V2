@@ -49,6 +49,8 @@ class Scan:
                 request_kwargs = {"http": f"http://{wallet_info['proxy']}",
                                   "https": f"http://{wallet_info['proxy']}"}
                 response = requests.get(url, headers=header, proxies=request_kwargs)
+            except KeyboardInterrupt:
+                exit()
             except:
                 try:
                     random_proxy = random.choice(all_proxies)
