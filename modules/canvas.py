@@ -187,17 +187,25 @@ class Canvas(Account):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(check_link, headers=self.headers, proxy=self.proxy) as response:
-                response_data = json.loads(await response.text())
+                try:
+                    response_data = json.loads(await response.text())
+                except json.JSONDecodeError:
+                    logger.error(f"[{self.account_id}][{self.address}] Bad response from website")
+                    return False
 
         if not response_data['eligibility']:
             logger.error(f"[{self.account_id}][{self.address}] Not eligible for mint")
             return False
 
-        link = f"{check_link}&recipient={self.address}".replace('check', 'claim')
+        link = check_link.replace('check', 'claim')
 
         async with aiohttp.ClientSession() as session:
             async with session.get(link, headers=self.headers, proxy=self.proxy) as response:
-                response_data = json.loads(await response.text())
+                try:
+                    response_data = json.loads(await response.text())
+                except json.JSONDecodeError:
+                    logger.error(f"[{self.account_id}][{self.address}] Bad response from website")
+                    return False
 
         if response_data['message'] == 'success':
             tx_data = await self.get_tx_data()
@@ -209,5 +217,8 @@ class Canvas(Account):
             await self.wait_until_tx_finished(txn_hash.hex())
             return True
         else:
-            logger.error(f"[{self.account_id}][{self.address}] Error on mint")
+            if 'message' in response_data:
+                logger.error(f"[{self.account_id}][{self.address}] Error on mint: {response_data['message']}")
+            else:
+                logger.error(f"[{self.account_id}][{self.address}] Bad response: {response_data}")
             return False
