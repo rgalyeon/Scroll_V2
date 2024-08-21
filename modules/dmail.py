@@ -26,7 +26,7 @@ class Dmail(Account):
 
         tx_data = await self.get_tx_data()
         tx_data.update(
-            {"data": data, "to": self.w3.to_checksum_address(DMAIL_CONTRACT), "gasPrice": await self.w3.eth.gas_price}
+            {"data": data, "to": self.w3.to_checksum_address(DMAIL_CONTRACT)}
         )
 
         signed_txn = await self.sign(tx_data)
