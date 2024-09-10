@@ -73,7 +73,7 @@ def get_module():
             Choice(f"{next(counter)}) Mint main badge [Canvas]", mint_canvas_badge),
             Choice(f"{next(counter)}) Mint Scroll Origin Badge [Canvas]", mint_scroll_origin_badge),
             Choice(f"{next(counter)}) Mint All Badges [Canvas]\n", mint_all_badges),
-            Choice(f"{next(counter)}) Claim PumpScroll tokens", claim_pumpscroll),
+            Choice(f"{next(counter)}) Claim ScrollPump tokens", claim_scrollpump),
             Choice(f"{next(counter)}) Use custom routes", custom_routes),
             Choice(f"{next(counter)}) Use automatic routes", automatic_routes),
             Choice(f"{next(counter)}) Check transaction count", "tx_checker"),

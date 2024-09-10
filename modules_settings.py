@@ -970,7 +970,7 @@ async def deploy_omnihub_nft(wallet_info):
     await omnihub_inst.deploy()
 
 
-async def claim_pumpscroll(wallet_info):
+async def claim_scrollpump(wallet_info):
     """
     Claim tokens from PumpScroll (Scroll Origins holders eligible)
     ------------------------------------------------------
