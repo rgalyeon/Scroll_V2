@@ -53,7 +53,7 @@ class PumpScroll(Account):
     @retry
     @check_gas
     async def claim_pump(self, refs=None):
-        logger.info(f"[{self.account_id}][{self.address}] Start claim PumpScroll tokens")
+        logger.info(f"[{self.account_id}][{self.address}] Start claim ScrollPump tokens")
 
         contract = self.get_contract(PUMPSCROLL_CONTRACT, PUMPSCROLL_ABI)
         address = self.w3.to_checksum_address(self.address)
