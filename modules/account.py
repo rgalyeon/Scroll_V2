@@ -163,7 +163,7 @@ class Account:
     async def sign(self, transaction) -> Any:
         if RPC[self.chain]["eip1559"]:
             max_priority_fee_per_gas = await self.get_priority_fee()
-            max_fee_per_gas = int((await self.w3.eth.gas_price) * 1.15)
+            max_fee_per_gas = int((await self.w3.eth.gas_price) * 1.15 * GAS_MULTIPLIER)
 
             transaction.update(
                 {

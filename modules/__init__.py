@@ -33,3 +33,4 @@ from .nitro import Nitro
 from .relay import Relay
 from .canvas import Canvas
 from .omnihub import OmniHub
+from .pumpscroll import PumpScroll

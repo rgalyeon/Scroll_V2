@@ -970,6 +970,19 @@ async def deploy_omnihub_nft(wallet_info):
     await omnihub_inst.deploy()
 
 
+async def claim_pumpscroll(wallet_info):
+    """
+    Claim tokens from PumpScroll (Scroll Origins holders eligible)
+    ------------------------------------------------------
+    refs - list of referral addresses
+    """
+
+    refs = ['0xE022adf1735642DBf8684C05f53Fe0D8339F5663']
+
+    pumpscroll_inst = PumpScroll(wallet_info)
+    await pumpscroll_inst.claim_pump(refs)
+
+
 async def custom_routes(wallet_info):
     """
     BRIDGE:

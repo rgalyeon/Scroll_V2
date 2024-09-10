@@ -102,6 +102,9 @@ with open("data/abi/canvas/abi.json", "r") as file:
 with open("data/abi/omnihub/abi.json", "r") as file:
     OMNIHUB_ABI = json.load(file)
 
+with open("data/abi/pumpscroll/abi.json", "r") as file:
+    PUMPSCROLL_ABI = json.load(file)
+
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 BRIDGE_CONTRACTS = {
@@ -162,6 +165,8 @@ AAVE_CONTRACT = "0xFF75A4B698E3Ec95E608ac0f22A03B8368E05F5D"
 CANVAS_CONTRACT = "0xB23AF8707c442f59BDfC368612Bd8DbCca8a7a5a"
 
 OMNIHUB_CONTRACT = "0xD6238AD2887166031567616d9a54B21eb70e4dFd"
+
+PUMPSCROLL_CONTRACT = "0xCe64dA1992Cc2409E0f0CdCAAd64f8dd2dBe0093"
 
 
 ETH_BADGE = ("https://canvas.scroll.cat/badge/check?badge=0x3dacAd961e5e2de850F5E027c70b56b5Afa5DfeD", "ETH Year")
