@@ -74,7 +74,7 @@ class Routes(Account):
             tasks.update(pair)
         modules_idx = {}
         for i, module in enumerate(modules):
-            if module.__name__ in tasks:
+            if module and module.__name__ in tasks:
                 modules_idx[module.__name__] = i
 
         for main, bonus in pairs:
