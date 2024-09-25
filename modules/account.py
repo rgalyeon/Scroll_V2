@@ -132,15 +132,18 @@ class Account:
                 approve_amount
             ).build_transaction(tx_data)
 
-            signed_txn = await self.sign(transaction)
-
-            txn_hash = await self.send_raw_transaction(signed_txn)
-
-            await self.wait_until_tx_finished(txn_hash.hex())
+            gas_multiplier = GAS_MULTIPLIER
+            while True:
+                signed_txn = await self.sign(transaction, gas_multiplier)
+                txn_hash = await self.send_raw_transaction(signed_txn)
+                res = await self.wait_until_tx_finished(txn_hash.hex())
+                if res != 'Not Found':
+                    break
+                gas_multiplier += 0.2
 
             await sleep(5, 20, message=f"[{self.account_id}][{self.address}] Sleep after approve")
 
-    async def wait_until_tx_finished(self, hash: str, max_wait_time=300) -> None:
+    async def wait_until_tx_finished(self, hash: str, max_wait_time=60):
         start_time = time.time()
         while True:
             try:
@@ -156,25 +159,32 @@ class Account:
                     return
             except TransactionNotFound:
                 if time.time() - start_time > max_wait_time:
-                    logger.warning(f"[{self.account_id}][{self.address}] Timeout. Failed tx: {self.explorer}{hash}")
-                    return
+                    logger.warning(f"[{self.account_id}][{self.address}] Timeout. Failed tx: {self.explorer}{hash}. Retry.")
+                    return 'Not Found'
                 await asyncio.sleep(1)
 
-    async def sign(self, transaction) -> Any:
+    async def sign(self, transaction, gas_multiplier=GAS_MULTIPLIER) -> Any:
         if RPC[self.chain]["eip1559"]:
+            base_fee = await self.w3.eth.gas_price
             max_priority_fee_per_gas = await self.get_priority_fee()
-            max_fee_per_gas = int((await self.w3.eth.gas_price) * 1.15 * GAS_MULTIPLIER)
+            max_fee_per_gas = int(base_fee + max_priority_fee_per_gas * 1.05 * gas_multiplier)
+
+            if self.chain in ('Scroll', 'Optimism'):
+                max_fee_per_gas = int(max_fee_per_gas / gas_multiplier * 1.1)
+
+            if max_priority_fee_per_gas > max_fee_per_gas:
+                max_priority_fee_per_gas = int(max_fee_per_gas * 0.95)
 
             transaction.update(
                 {
                     "maxPriorityFeePerGas": max_priority_fee_per_gas,
-                    "maxFeePerGas": max_fee_per_gas,
+                    "maxFeePerGas": int(max_fee_per_gas * 1.2),
                     "type": "0x2"
                 }
             )
 
         gas = await self.w3.eth.estimate_gas(transaction)
-        gas = int(gas * GAS_MULTIPLIER)
+        gas = int(gas * gas_multiplier)
 
         transaction.update({"gas": gas})
 
