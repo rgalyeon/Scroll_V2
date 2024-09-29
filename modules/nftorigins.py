@@ -50,8 +50,4 @@ class NftOrigins(Account):
             proof
         ).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(tx_data)

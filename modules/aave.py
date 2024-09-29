@@ -54,9 +54,7 @@ class Aave(Account):
             0
         ).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-        txn_hash = await self.send_raw_transaction(signed_txn)
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)
 
     async def get_deposit_amount(self):
         aave_weth_contract = self.get_contract(self.aave_weth_contract)
@@ -100,8 +98,6 @@ class Aave(Account):
                 self.address
             ).build_transaction(tx_data)
 
-            signed_txn = await self.sign(transaction)
-            txn_hash = await self.send_raw_transaction(signed_txn)
-            await self.wait_until_tx_finished(txn_hash.hex())
+            await self.send_tx(transaction)
         else:
             logger.warning(f"[{self.account_id}][{self.address}] Deposit not found. Skip module")

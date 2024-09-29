@@ -40,8 +40,4 @@ class GnosisSafe(Account):
             int(time.time()*1000)
         ).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)

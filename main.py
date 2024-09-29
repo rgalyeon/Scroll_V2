@@ -146,6 +146,10 @@ if __name__ == '__main__':
     print(HEADER)
     print("Author – https://t.me/block_nine\n")
 
+    if sys.platform.startswith("win"):
+        # for windows
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     if SAVE_LOGS:
         logger.add('logs.txt', filter=filter_out_utils)
 

@@ -46,7 +46,4 @@ class OrbiterInscription(Account):
             'to': self.contract_address
         })
 
-        signed_txn = await self.sign(tx_data)
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(tx_data)

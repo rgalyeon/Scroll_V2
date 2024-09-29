@@ -1,5 +1,6 @@
 import asyncio
 import random
+import traceback
 
 from web3 import AsyncWeb3
 from web3.eth import AsyncEth
@@ -41,8 +42,10 @@ def get_max_gwei_user_settings():
 
 
 async def get_gas(request_kwargs):
+    rpc = None
     try:
         gas_chain = "scroll" if USE_SCROLL_GWEI else "ethereum"
+        rpc = random.choice(RPC[gas_chain]["rpc"])
         w3 = AsyncWeb3(
             AsyncWeb3.AsyncHTTPProvider(random.choice(RPC[gas_chain]["rpc"]),
                                         request_kwargs=request_kwargs),
@@ -51,11 +54,12 @@ async def get_gas(request_kwargs):
         gas_price = await w3.eth.gas_price
         gwei = w3.from_wei(gas_price, 'gwei')
         return gwei
-    except Exception:
+    except Exception as e:
         if 'proxy' in request_kwargs:
             logger.error(f"Can't connect to rpc with {request_kwargs['proxy']} proxy")
         else:
-            logger.error(f"Can't connect to rpc. Try to turn off VPN")
+            logger.error(f"Can't connect to rpc {rpc}. Try to turn off VPN")
+        logger.error(f"Error: {str(e)}")
 
 
 async def wait_gas(account):

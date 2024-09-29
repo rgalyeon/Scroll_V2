@@ -36,11 +36,7 @@ class ZkStars(Account):
                 self.w3.to_checksum_address("0xE022adf1735642DBf8684C05f53Fe0D8339F5663")
             ).build_transaction(tx_data)
 
-            signed_txn = await self.sign(transaction)
-
-            txn_hash = await self.send_raw_transaction(signed_txn)
-
-            await self.wait_until_tx_finished(txn_hash.hex())
+            await self.send_tx(transaction)
 
             if _ != len(contracts):
                 await sleep(sleep_from, sleep_to, message="Sleep between next mint")

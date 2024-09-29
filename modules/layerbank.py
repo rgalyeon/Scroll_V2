@@ -58,11 +58,7 @@ class LayerBank(Account):
             amount_wei,
         ).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)
 
     @retry
     @check_gas
@@ -98,10 +94,6 @@ class LayerBank(Account):
                 amount_wei,
             ).build_transaction(tx_data)
 
-            signed_txn = await self.sign(transaction)
-
-            txn_hash = await self.send_raw_transaction(signed_txn)
-
-            await self.wait_until_tx_finished(txn_hash.hex())
+            await self.send_tx(transaction)
         else:
             logger.error(f"[{self.account_id}][{self.address}] Deposit not found")

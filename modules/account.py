@@ -11,7 +11,7 @@ from web3.exceptions import TransactionNotFound
 from web3.middleware import async_geth_poa_middleware
 
 from config import RPC, ERC20_ABI, SCROLL_TOKENS
-from settings import GAS_MULTIPLIER, USE_PROXY
+from settings import GAS_MULTIPLIER, USE_PROXY, RETRY_COUNT
 from utils.sleeping import sleep
 
 
@@ -132,14 +132,7 @@ class Account:
                 approve_amount
             ).build_transaction(tx_data)
 
-            gas_multiplier = GAS_MULTIPLIER
-            while True:
-                signed_txn = await self.sign(transaction, gas_multiplier)
-                txn_hash = await self.send_raw_transaction(signed_txn)
-                res = await self.wait_until_tx_finished(txn_hash.hex())
-                if res != 'Not Found':
-                    break
-                gas_multiplier += 0.2
+            await self.send_tx(transaction)
 
             await sleep(5, 20, message=f"[{self.account_id}][{self.address}] Sleep after approve")
 
@@ -224,3 +217,19 @@ class Account:
             middlewares=[async_geth_poa_middleware]
         )
         return w3
+
+    async def send_tx(self, tx):
+        n_attempt = 0
+        while n_attempt < RETRY_COUNT:
+            gas_multiplier = GAS_MULTIPLIER
+            signed_txn = await self.sign(tx, gas_multiplier)
+            txn_hash = await self.send_raw_transaction(signed_txn)
+            res = await self.wait_until_tx_finished(txn_hash.hex())
+            if res != 'Timeout':
+                break
+            n_attempt += 1
+            gas_multiplier += 0.1
+            await sleep(5, 5, 'Sleep before next attempt')
+
+
+

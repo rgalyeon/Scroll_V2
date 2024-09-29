@@ -77,9 +77,7 @@ class Transfer(Account):
         tx_data = await self.get_tx_data(amount_wei)
 
         tx_data.update({"to": self.w3.to_checksum_address(self.okx_address)})
-        signed_txn = await self.sign(tx_data)
-        txn_hash = await self.send_raw_transaction(signed_txn)
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(tx_data)
 
     @retry
     @check_gas

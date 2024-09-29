@@ -55,10 +55,7 @@ class Scroll(Transfer):
             amount_wei,
             0
         ).build_transaction(tx_data)
-        signed_txn = await self.sign(transaction)
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)
 
     async def deposit_logic(self, source_chain, destination_chain, amount_wei, amount, balance):
         logger.info(f"[{self.account_id}][{self.address}] Bridge to Scroll | {amount} ETH")
@@ -76,11 +73,7 @@ class Scroll(Transfer):
                 168000,
             ).build_transaction(tx_data)
 
-            signed_txn = await self.sign(transaction)
-
-            txn_hash = await self.send_raw_transaction(signed_txn)
-
-            await self.wait_until_tx_finished(txn_hash.hex())
+            await self.send_tx(transaction)
         else:
             raise ValueError('Insufficient funds')
 
@@ -133,11 +126,7 @@ class Scroll(Transfer):
 
         transaction = await weth_contract.functions.deposit().build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)
 
     @retry
     @check_gas
@@ -168,8 +157,4 @@ class Scroll(Transfer):
 
         transaction = await weth_contract.functions.withdraw(amount_wei).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)

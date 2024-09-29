@@ -31,9 +31,7 @@ class Minter(Account):
                     transaction = await contract.functions.mintRandomTo(self.address, 1).build_transaction(tx_data)
                 else:
                     raise ValueError('Unknown mint method')
-                signed_txn = await self.sign(transaction)
-                txn_hash = await self.send_raw_transaction(signed_txn)
-                await self.wait_until_tx_finished(txn_hash.hex())
+                await self.send_tx(transaction)
                 break
             nfts.remove((contr, method))
         else:

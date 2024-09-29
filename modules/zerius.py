@@ -53,10 +53,10 @@ class Zerius(Account):
 
         transaction = await self.contract.functions.mint().build_transaction(tx_data)
 
+        # TODO need fix
+
         signed_txn = await self.sign(transaction)
-
         txn_hash = await self.send_raw_transaction(signed_txn)
-
         await self.wait_until_tx_finished(txn_hash.hex())
 
         return txn_hash.hex()
@@ -86,11 +86,7 @@ class Zerius(Account):
             "0x0001000000000000000000000000000000000000000000000000000000000003d090"
         ).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)
 
     async def mint_and_bridge(self, chain, sleep_from, sleep_to):
         mint_nft = await self.mint()

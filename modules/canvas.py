@@ -99,9 +99,7 @@ class Canvas(Account):
             sig
         ).build_transaction(tx_data)
 
-        signed_txn = await self.sign(transaction)
-        txn_hash = await self.send_raw_transaction(signed_txn)
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(transaction)
 
         return True
 
@@ -163,9 +161,7 @@ class Canvas(Account):
               bytes.fromhex("0000000000000000000000000000000000000000000000000000000000000000"),
               bytes.fromhex(f"0000000000000000000000002dbce60ebeaafb77e5472308f432f78ac3ae07d90000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004000000000000000000000000074670a3998d9d6622e32d0847ff5977c37e0ec910000000000000000000000{hex(token_id)[2::].rjust(42, '0')}"), 0))]).hex()
 
-        signed_txn = await self.sign(tx_data)
-        txn_hash = await self.send_raw_transaction(signed_txn)
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(tx_data)
         return True
 
     @retry
@@ -212,9 +208,7 @@ class Canvas(Account):
             tx_data['to'] = self.w3.to_checksum_address(response_data['tx']['to'])
             tx_data['data'] = response_data['tx']['data']
 
-            signed_txn = await self.sign(tx_data)
-            txn_hash = await self.send_raw_transaction(signed_txn)
-            await self.wait_until_tx_finished(txn_hash.hex())
+            await self.send_tx(tx_data)
             return True
         else:
             if 'message' in response_data:

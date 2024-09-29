@@ -114,8 +114,4 @@ class Skydrome(Account):
         else:
             contract_txn = await self.swap_to_eth(from_token, to_token, amount_wei, slippage)
 
-        signed_txn = await self.sign(contract_txn)
-
-        txn_hash = await self.send_raw_transaction(signed_txn)
-
-        await self.wait_until_tx_finished(txn_hash.hex())
+        await self.send_tx(contract_txn)
