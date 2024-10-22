@@ -1067,11 +1067,11 @@ async def automatic_routes(wallet_info):
     transaction_count = 6
     cheap_ratio = 1
 
-    sleep_from = 1500
-    sleep_to = 3600
+    sleep_from = 3600
+    sleep_to = 4000
 
-    use_none = True
-    cheap_modules = [send_mail, mint_zkstars, vote_rubyscore, mint_nft, check_in_secondlive]
+    use_none = False
+    cheap_modules = [send_mail, vote_rubyscore, mint_nft]
     expensive_modules = [create_omnisea, create_safe, mint_zerius, deposit_aave]
 
     routes_inst = Routes(wallet_info)
@@ -1079,6 +1079,13 @@ async def automatic_routes(wallet_info):
                                       sleep_from, sleep_to,
                                       cheap_modules, expensive_modules,
                                       use_none)
+
+async def transfer_erc20(wallet_info):
+    chain = 'scroll'
+    token_contract = '0xd29687c813d741e2f938f4ac377128810e217b1b' # SCR
+
+    transfer_inst = Transfer(wallet_info)
+    await transfer_inst.transfer_erc20(token_contract, chain)
 
 
 # -------------------------------------------- NO NEED TO SET UP MODULES
@@ -1134,6 +1141,11 @@ async def check_in_secondlive(wallet_info):
     """
     second_live = SecondLive(wallet_info)
     await second_live.sign_in()
+
+async def claim_airdrop(wallet_info):
+
+    claimer = Claimer(wallet_info)
+    await claimer.claim()
 
 
 def get_tx_count():

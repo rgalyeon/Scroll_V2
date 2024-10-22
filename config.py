@@ -105,6 +105,9 @@ with open("data/abi/omnihub/abi.json", "r") as file:
 with open("data/abi/pumpscroll/abi.json", "r") as file:
     PUMPSCROLL_ABI = json.load(file)
 
+with open("data/abi/scroll/claimer.json") as file:
+    CLAIMER_ABI = json.load(file)
+
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 BRIDGE_CONTRACTS = {

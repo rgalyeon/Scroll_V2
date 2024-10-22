@@ -79,6 +79,8 @@ def get_module():
             Choice(f"{next(counter)}) Check transaction count", "tx_checker"),
             Choice(f"{next(counter)}) Scroll Marks checker (need proxy)", marks_progress_check),
             Choice(f"{next(counter)}) Badges checker (need proxy)", badges_progress_check),
+            Choice(f"{next(counter)}) Transfer ERC20", transfer_erc20),
+            Choice(f"{next(counter)}) Claim Airdrop", claim_airdrop),
             Choice(f"{next(counter)}) Exit", "exit"),
         ],
         qmark="⚙️ ",

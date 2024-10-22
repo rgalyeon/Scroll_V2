@@ -1,11 +1,7 @@
 {
   "ethereum": {
     "rpc": [
-      "https://rpc.ankr.com/eth",
-      "https://ethereum.publicnode.com",
-      "https://rpc.flashbots.net",
-      "https://1rpc.io/eth",
-      "https://eth.drpc.org"
+      "https://ethereum.publicnode.com"
     ],
     "explorer": "https://etherscan.io/tx/",
     "token": "ETH",
@@ -76,8 +72,6 @@
   },
   "linea": {
     "rpc": [
-      "https://linea.drpc.org",
-      "https://1rpc.io/linea",
       "https://rpc.linea.build"
     ],
     "explorer": "https://lineascan.build/tx/",

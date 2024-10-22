@@ -4,7 +4,7 @@ from typing import List
 from web3 import AsyncWeb3, AsyncHTTPProvider
 from web3.middleware import async_geth_poa_middleware
 import random
-from config import RPC
+from config import RPC, ERC20_ABI
 from loguru import logger
 from utils.helpers import retry, sleep
 from utils.gas_checker import check_gas
@@ -136,3 +136,21 @@ class Transfer(Account):
                 break
             await sleep(*sleep_between_transfers,
                         message=f"[{self.account_id}][{self.address}] Sleep before next transfer")
+
+
+    @retry
+    @check_gas
+    async def transfer_erc20(self, token_contract, chain):
+        self.change_settings(chain)
+        contract = self.get_contract(self.w3.to_checksum_address(token_contract), ERC20_ABI)
+
+        while True:
+            balance = await contract.functions.balanceOf(self.address).call()
+            if balance > 0:
+                tx_data = await self.get_tx_data()
+                transaction = await contract.functions.transfer(
+                    self.okx_address,
+                    balance).build_transaction(tx_data)
+                await self.send_tx(transaction)
+            else:
+                await sleep(1, 1)

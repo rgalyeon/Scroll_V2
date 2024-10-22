@@ -34,3 +34,4 @@ from .relay import Relay
 from .canvas import Canvas
 from .omnihub import OmniHub
 from .pumpscroll import PumpScroll
+from .claimer import Claimer

@@ -19,7 +19,7 @@ def retry(func):
             except Exception as e:
                 logger.error(f"Error | {e}")
                 traceback.print_exc()
-                await sleep(10, 20)
+                await sleep(10, 10)
                 retries += 1
 
     return wrapper
