@@ -144,13 +144,12 @@ class Transfer(Account):
         self.change_settings(chain)
         contract = self.get_contract(self.w3.to_checksum_address(token_contract), ERC20_ABI)
 
-        while True:
-            balance = await contract.functions.balanceOf(self.address).call()
-            if balance > 0:
-                tx_data = await self.get_tx_data()
-                transaction = await contract.functions.transfer(
-                    self.okx_address,
-                    balance).build_transaction(tx_data)
-                await self.send_tx(transaction)
-            else:
-                await sleep(1, 1)
+        balance = await contract.functions.balanceOf(self.address).call()
+        if balance > 0:
+            tx_data = await self.get_tx_data()
+            transaction = await contract.functions.transfer(
+                self.okx_address,
+                balance).build_transaction(tx_data)
+            await self.send_tx(transaction)
+        else:
+            logger.warning(f'[{self.account_id}][{self.address}] No balance of token')
